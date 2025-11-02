@@ -91,8 +91,8 @@ Semua tabel menggunakan:
 ---
 
 ## 🧠 Ringkasan Relasi
-#users (1) ────< articles (N)
-#users (1) ────< likes (N) >──── articles (1)
-#users (1) ────< comments (N) >──── articles (1)
+- users (1) ────< articles (N)
+- users (1) ────< likes (N) >──── articles (1)
+- users (1) ────< comments (N) >──── articles (1)
 
 
