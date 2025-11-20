@@ -34,9 +34,11 @@ Menyimpan artikel yang dibuat oleh pengguna (biasanya admin atau penulis).
 | `slug` | `VARCHAR(255)` | URL-friendly version dari judul (unik) |
 | `content` | `MEDIUMTEXT` | Isi artikel |
 | `image` | `VARCHAR(255)` | Lokasi gambar artikel (opsional) |
+| `genre` | `enum` | untuk kategori artikel  |
 | `author_id` | `INT` | Mengacu ke `users.id` |
 | `created_at` | `DATETIME` | Waktu pembuatan artikel |
 | `updated_at` | `DATETIME` | Otomatis diperbarui setiap update |
+
 
 🔗 **Relasi:**  
 - `author_id` → `users(id)`  
