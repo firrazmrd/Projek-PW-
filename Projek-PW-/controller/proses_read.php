@@ -13,16 +13,30 @@ $offset = ($page - 1) * $perPage;
 
 /*
  |----------------------------------------------
- | 2. SEARCH
+ | 2. FILTER GENRE + SEARCH
  |----------------------------------------------
 */
 $search = trim($_GET['q'] ?? '');
-$where = "";
-$paramLike = "";
+$genre  = trim($_GET['genre'] ?? '');
 
+$where = "WHERE 1";
+$params = [];
+$types  = "";
+
+/* Filter genre */
+if ($genre !== "") {
+    $where .= " AND genre = ?";
+    $params[] = $genre;
+    $types   .= "s";
+}
+
+/* Filter search */
 if ($search !== "") {
-    $where = "WHERE title LIKE ? OR content LIKE ?";
-    $paramLike = "%$search%";
+    $where .= " AND (title LIKE ? OR content LIKE ?)";
+    $like = "%$search%";
+    $params[] = $like;
+    $params[] = $like;
+    $types   .= "ss";
 }
 
 /*
@@ -33,11 +47,11 @@ if ($search !== "") {
 $sqlCount = "SELECT COUNT(*) AS total FROM articles $where";
 $stmt = mysqli_prepare($koneksi, $sqlCount);
 
-if ($search !== "") {
-    mysqli_stmt_bind_param($stmt, "ss", $paramLike, $paramLike);
+if (!empty($params)) {
+    mysqli_stmt_bind_param($stmt, $types, ...$params);
 }
-
 mysqli_stmt_execute($stmt);
+
 $res = mysqli_stmt_get_result($stmt);
 $totalItems = mysqli_fetch_assoc($res)['total'];
 mysqli_stmt_close($stmt);
@@ -46,17 +60,17 @@ $totalPages = ceil($totalItems / $perPage);
 
 /*
  |----------------------------------------------
- | 4. AMBIL ARTIKEL (LIMIT + SEARCH)
+ | 4. AMBIL ARTIKEL SESUAI FILTER
  |----------------------------------------------
 */
 $sql = "SELECT * FROM articles $where ORDER BY created_at DESC LIMIT ? OFFSET ?";
 $stmt = mysqli_prepare($koneksi, $sql);
 
-if ($search !== "") {
-    mysqli_stmt_bind_param($stmt, "ssii", $paramLike, $paramLike, $perPage, $offset);
-} else {
-    mysqli_stmt_bind_param($stmt, "ii", $perPage, $offset);
-}
+// Tambahkan limit & offset
+$typesWithLimit = $types . "ii";
+$paramsWithLimit = array_merge($params, [$perPage, $offset]);
+
+mysqli_stmt_bind_param($stmt, $typesWithLimit, ...$paramsWithLimit);
 
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
@@ -65,65 +79,44 @@ mysqli_stmt_close($stmt);
 
 /*
  |----------------------------------------------
- | 5. PREPARE LIKE & COMMENT COUNTERS
+ | 5. HITUNG LIKE, KOMENTAR, CEK USER LIKE
  |----------------------------------------------
 */
-$likesCount     = [];   // total like untuk setiap artikel
-$commentsCount  = [];   // total komen untuk setiap artikel
-$userLiked      = [];   // artikel apa saja yang user telah like
+$likesCount     = [];
+$commentsCount  = [];
+$userLiked      = [];
 
-// Ambil ID semua artikel yang tampil
 $articleIds = array_column($articles, 'id');
 
 if (!empty($articleIds)) {
 
     $idList = implode(",", array_map('intval', $articleIds));
 
-    /*
-    |----------------------------------------------
-    | 5A. HITUNG TOTAL LIKE PER ARTIKEL
-    |----------------------------------------------
-    */
-    $sqlLike = "SELECT article_id, COUNT(*) AS total
-                FROM likes
+    /* LIKE COUNT */
+    $sqlLike = "SELECT article_id, COUNT(*) AS total FROM likes 
                 WHERE article_id IN ($idList)
                 GROUP BY article_id";
-
     $resLike = mysqli_query($koneksi, $sqlLike);
-
     while ($row = mysqli_fetch_assoc($resLike)) {
         $likesCount[$row['article_id']] = (int)$row['total'];
     }
 
-    /*
-    |----------------------------------------------
-    | 5B. HITUNG TOTAL KOMENTAR PER ARTIKEL
-    |----------------------------------------------
-    */
-    $sqlCom = "SELECT article_id, COUNT(*) AS total
-               FROM comments
+    /* COMMENT COUNT */
+    $sqlCom = "SELECT article_id, COUNT(*) AS total FROM comments 
                WHERE article_id IN ($idList)
                GROUP BY article_id";
-
     $resCom = mysqli_query($koneksi, $sqlCom);
-
     while ($row = mysqli_fetch_assoc($resCom)) {
         $commentsCount[$row['article_id']] = (int)$row['total'];
     }
 
-    /*
-    |----------------------------------------------
-    | 5C. CEK ARTIKEL MANA SAJA YANG SUDAH DI-LIKE USER
-    |----------------------------------------------
-    */
-    if (!empty($_SESSION['user_id'])) {
-
+    /* CHECK USER LIKE */
+    if (isset($_SESSION['user_id'])) {
         $uid = (int)$_SESSION['user_id'];
 
-        $sqlUserLike = "SELECT article_id FROM likes 
-                        WHERE user_id = $uid AND article_id IN ($idList)";
-
-        $resUL = mysqli_query($koneksi, $sqlUserLike);
+        $sqlUL = "SELECT article_id FROM likes 
+                  WHERE user_id = $uid AND article_id IN ($idList)";
+        $resUL = mysqli_query($koneksi, $sqlUL);
 
         while ($row = mysqli_fetch_assoc($resUL)) {
             $userLiked[$row['article_id']] = true;

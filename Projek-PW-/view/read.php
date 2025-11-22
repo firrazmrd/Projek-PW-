@@ -30,10 +30,10 @@ require_once "../controller/proses_read.php";
             
             <?php foreach ($articles as $a): ?>
                 <?php
-                    $aid = $a['id'];
-                    $countLikes = $likesCount[$aid] ?? 0;
+                    $aid           = $a['id'];
+                    $countLikes    = $likesCount[$aid]    ?? 0;
                     $countComments = $commentsCount[$aid] ?? 0;
-                    $hasLiked = !empty($userLiked[$aid]);
+                    $hasLiked      = !empty($userLiked[$aid]);
                 ?>
 
             <div class="col-sm-6 col-lg-4">
