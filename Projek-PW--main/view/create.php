@@ -1,0 +1,117 @@
+<?php
+session_start();
+$errors = $_SESSION['errors'] ?? [];
+unset($_SESSION['errors']);
+require_once __DIR__ . '/../controller/auth.php';
+require_admin()
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Buat Artikel</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <h1 class="h3 mb-4">Buat Artikel</h1>
+
+      <!-- Error Area -->
+      <?php if (!empty($errors)): ?>
+        <div class="alert alert-danger">
+          <ul class="mb-0">
+            <?php foreach ($errors as $e): ?>
+              <li><?= htmlspecialchars($e) ?></li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
+      <?php endif; ?>
+
+      <!-- Success -->
+      <?php if (!empty($_GET['success'])): ?>
+        <div class="alert alert-success">
+          Artikel berhasil disimpan!
+        </div>
+      <?php endif; ?>
+
+      <div class="card shadow-sm">
+        <div class="card-body">
+
+          <form action="../controller/proses_create.php" method="POST" enctype="multipart/form-data">
+
+            <!-- Judul -->
+            <div class="mb-3">
+              <label class="form-label">Judul</label>
+              <input type="text" name="title" class="form-control" required>
+            </div>
+
+            <!-- Genre -->
+            <div class="mb-3">
+              <label class="form-label">Kategori</label>
+              <select name="genre" class="form-select" required>
+                <option value="">-- Pilih Kategori --</option>
+                <option value="Sepak Bola">Sepak Bola</option>
+                <option value="Basket">Basket</option>
+                <option value="Bulu Tangkis">Bulu Tangkis</option>
+                <option value="Tenis">Tenis</option>
+                <option value="Voli">Voli</option>
+                <option value="Renang">Renang</option>
+                <option value="Atletik">Atletik</option>
+                <option value="Tinju">Tinju</option>
+                <option value="MotoGP">MotoGP</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+            </div>
+
+            <!-- Isi Artikel -->
+            <div class="mb-3">
+              <label class="form-label">Isi Artikel</label>
+              <textarea id="editor" name="content" class="form-control" rows="10"></textarea>
+            </div>
+
+            <!-- Gambar -->
+            <div class="mb-3">
+              <label class="form-label">Gambar Utama</label>
+              <input type="file" name="image" class="form-control" accept="image/*">
+            </div>
+
+            <!-- Tombol -->
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary px-4">Simpan</button>
+              <a href="index.php" class="btn btn-secondary">Batal</a>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TinyMCE -->
+<script src="https://cdn.tiny.cloud/1/2cavu4bix6n6mqx2dtna24bn9uabud3w2sdzqkeiw6wiszzi/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+<script>
+tinymce.init({
+  selector: '#editor',
+  height: 400,
+  plugins: 'image link media table lists code',
+  toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image | code',
+  menubar: false
+});
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

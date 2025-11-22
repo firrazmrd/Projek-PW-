@@ -62,7 +62,7 @@ $_SESSION['user_role']  = $role;
 
 // Redirect berdasarkan role
 if ($role === 'admin') {
-    header("Location: ../view/admin/admin_dashboard.php");
+    header("Location: ../view/dashboard_admin.php");
     exit;
 } else {
     header("Location: ../view/index.php");
