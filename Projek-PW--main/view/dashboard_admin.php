@@ -1,3 +1,21 @@
+<?php
+session_start();
+require "../config/koneksi.php";  // sesuaikan path bila perlu
+
+// ===== CEK LOGIN =====
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
+// ===== AMBIL DATA USER DARI DATABASE =====
+$user_id = $_SESSION['user_id'];
+$query = mysqli_query($koneksi, "SELECT name, role FROM users WHERE id = '$user_id'");
+$data = mysqli_fetch_assoc($query);
+
+$user_name = $data['name'];
+$user_role = $data['role']; // admin / user
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +28,7 @@
 
     <style>
         body {
-            font-family: "Poppins", sans-serif;
+            font-family: "Poppins";
             background: #f5f6fa;
         }
 
@@ -61,7 +79,6 @@
             font-weight: 600;
         }
 
-        /* ===== MAIN CONTENT ===== */
         .main {
             margin-left: 260px;
             padding: 40px;
@@ -126,8 +143,8 @@
             <div class="d-flex align-items-center gap-2">
                 <ion-icon name="person-circle-outline" style="font-size: 30px;"></ion-icon>
                 <div>
-                    <strong>Mufid Dhamarjati Kusuma</strong> <br>
-                    <small>Role: admin</small>
+                    <strong><?= htmlspecialchars($user_name) ?></strong> <br>
+                    <small>Role: <?= htmlspecialchars($user_role) ?></small>
                 </div>
             </div>
 
@@ -139,7 +156,7 @@
 
     <div class="main">
         <h1>Admin Dashboard</h1>
-        <p>Selamat datang, Mufid Dhamarjati Kusuma — role: admin</p>
+        <p>Selamat datang, <?= htmlspecialchars($user_name) ?> — role: <?= htmlspecialchars($user_role) ?></p>
 
         <div class="row mt-4">
             <div class="col-md-6 mb-4">
@@ -154,7 +171,7 @@
                 <div class="card-custom">
                     <h4>Kelola Komentar</h4>
                     <p>Review pesan atau komentar dari pengunjung.</p>
-                    <a href="kelola_komentar">Lihat komentar →</a>
+                    <a href="kelola_komentar.php">Lihat komentar →</a>
                 </div>
             </div>
         </div>
