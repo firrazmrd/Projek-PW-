@@ -1,16 +1,4 @@
-<?php
-session_start(); 
-require_once __DIR__ . '/../config/koneksi.php';
-require_once __DIR__ . '/../controller/auth.php';
-
-function dashboard_link_for_role() {
-    $role = $_SESSION['user_role'] ?? 'user';
-    if ($role === 'admin') {
-        return 'dashboard_admin.php'; // atau 'admin/' kalau index.php di folder admin
-    }
-    return 'dashboard_user.php'; // atau 'users/'
-}
-?>
+<?php session_start(); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -182,13 +170,11 @@ function dashboard_link_for_role() {
                 <div class="me-auto"></div>
 
                 <!-- SEARCH -->
-                <form class="d-flex mx-auto" style="max-width: 400px;" role="search" method="GET" action="read.php">
-
-                    <input class="form-control me-2" type="search" name="q" placeholder="Search">
-
+                <form class="d-flex mx-auto" style="max-width: 400px;" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search">
                     <button class="btn btn-success" type="submit">Search</button>
                 </form>
-                
+
                 <div class="d-flex align-items-center ms-auto">
 
                     <!-- DARK MODE BUTTON -->
@@ -223,7 +209,7 @@ function dashboard_link_for_role() {
                         </button>
 
                         <ul class="dropdown-menu dropdown-menu-end shadow custom-dropdown">
-                            <li><a class="dropdown-item" href="<?= dashboard_link_for_role() ?>">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="dashboard_admin.php">Dashboard</a></li>
 
                             <li>
                                 <form action="../controller/logout.php" method="POST" class="m-0">
@@ -275,75 +261,64 @@ function dashboard_link_for_role() {
     </div>
 
 
-    <?php
-            // Ambil artikel terbaru genre Sepak Bola
-            
-        // =============================
-        //   DAFTAR GENRE OTOMATIS
-        // =============================
-        $genreList = [
-            "Sepak Bola" => "Soccer",
-            "Basket" => "Basketball",
-            "Bulu Tangkis" => "Badminton",
-            "Tenis" => "Tennis",
-            "Voli" => "Volleyball",
-            "Renang" => "Swimming",
-            "Atletik" => "Athletics",
-            "Tinju" => "Boxing",
-            "MotoGP" => "MotoGP",
-            "Lainnya" => "Lainnya"
-        ];
-
-        // =============================
-        //   LOOP TIAP GENRE
-        // =============================
-        foreach ($genreList as $dbGenre => $displayName):
-
-            $sql = "SELECT id, title, image, slug 
-                    FROM articles 
-                    WHERE genre = ?
-                    ORDER BY created_at DESC 
-                    LIMIT 10";
-
-            $stmt = mysqli_prepare($koneksi, $sql);
-            mysqli_stmt_bind_param($stmt, "s", $dbGenre);
-            mysqli_stmt_execute($stmt);
-            $resultGenre = mysqli_stmt_get_result($stmt);
-        ?>
     <div class="container mt-5">
-
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3><?= htmlspecialchars($displayName) ?></h3>
-            <a href="read.php?genre=<?= urlencode($dbGenre) ?>" class="text-secondary">Show all</a>
+            <h3>Soccer</h3>
+            <a href="#" class="text-secondary">Show all</a>
         </div>
 
         <div class="scroll-row">
-
-            <?php if (mysqli_num_rows($resultGenre) > 0): ?>
-            <?php while ($row = mysqli_fetch_assoc($resultGenre)): ?>
-
-            <div class="sport-card" onclick="window.location.href='read_single.php?slug=<?= $row['slug'] ?>'">
-
-                <?php if (!empty($row['image'])): ?>
-                <img src="../<?= htmlspecialchars($row['image']) ?>">
-                <?php else: ?>
-                <img src="../img/default.jpg">
-                <?php endif; ?>
-
-                <p><?= htmlspecialchars($row['title']) ?></p>
+            <div class="sport-card">
+                <img src="../img/bolas.jpeg">
+                <p>Teknik Dribbling Modern</p>
             </div>
 
-            <?php endwhile; ?>
-            <?php else: ?>
-            <p class="text-muted">Belum ada artikel <?= htmlspecialchars($displayName) ?>.</p>
-            <?php endif; ?>
+            <div class="sport-card">
+                <img src="../img/bolas.jpeg">
+                <p>Cara Shooting yang Benar</p>
+            </div>
 
+            <div class="sport-card">
+                <img src="../img/bolas.jpeg">
+                <p>Latihan Fisik Pemain Pro</p>
+            </div>
+
+            <div class="sport-card">
+                <img src="../img/bolas.jpeg">
+                <p>Strategi 4-3-3 Modern</p>
+            </div>
         </div>
-
     </div>
 
-    <?php endforeach; ?>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3>Basketball</h3>
+            <a href="#" class="text-secondary">Show all</a>
+        </div>
 
+        <div class="scroll-row">
+            <div class="sport-card">
+                <img src="../img/bola.jpeg">
+                <p>Belajar Layup</p>
+            </div>
+
+            <div class="sport-card">
+                <img src="../img/bola.jpeg">
+                <p>Cara Melakukan Slam Dunk</p>
+            </div>
+
+            <div class="sport-card">
+                <img src="../img/bola.jpeg">
+                <p>Panduan Shooting Jarak Jauh</p>
+            </div>
+
+            <div class="sport-card">
+                <img src="../img/bola.jpeg">
+                <p>Drill Defense Pro</p>
+            </div>
+        </div>
+    </div>
+    </div>
     <script>
     const modeSwitch = document.getElementById("modeSwitch");
     const body = document.getElementById("body");
@@ -400,6 +375,8 @@ function dashboard_link_for_role() {
             navbar.classList.add("navbar-light", "bg-light");
         }
     });
+
+
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>

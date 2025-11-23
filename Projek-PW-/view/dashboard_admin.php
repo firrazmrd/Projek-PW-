@@ -1,16 +1,42 @@
+<?php
+session_start();
+
+require_once __DIR__ . '/../config/koneksi.php';
+require_once __DIR__ . '/../controller/auth.php';
+
+require_admin();
+
+require "../config/koneksi.php";  // sesuaikan path bila perlu
+
+// ===== CEK LOGIN =====
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
+// ===== AMBIL DATA USER DARI DATABASE =====
+$user_id = $_SESSION['user_id'];
+$query = mysqli_query($koneksi, "SELECT name, role FROM users WHERE id = '$user_id'");
+$data = mysqli_fetch_assoc($query);
+
+$user_name = $data['name'];
+$user_role = $data['role']; // admin / user
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
         body {
-            font-family: "Poppins", sans-serif;
+            font-family: "Poppins";
             background: #f5f6fa;
         }
 
@@ -61,7 +87,6 @@
             font-weight: 600;
         }
 
-        /* ===== MAIN CONTENT ===== */
         .main {
             margin-left: 260px;
             padding: 40px;
@@ -80,14 +105,14 @@
             padding: 25px;
             border-radius: 15px;
             background: white;
-            box-shadow: 0 0 7px rgba(0,0,0,0.08);
+            box-shadow: 0 0 7px rgba(0, 0, 0, 0.08);
             border: none;
             transition: .2s;
         }
 
         .card-custom:hover {
             transform: translateY(-3px);
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
 
         .card-custom h4 {
@@ -107,62 +132,71 @@
     </style>
 
 </head>
+
 <body>
+    <!-- <div id="modeSwitch" class="theme-switch"></div>
+    <body id="body">
+        <nav id="navbar"></nav> -->
 
-    <div class="sidebar">
-        <a class="navbar-brand d-flex align-items-center" href="index.php">
-            <img src="../img/logo.png" alt="Logo" width="35" height="35" class="me-2">
-            <strong>Sportify</strong>
-        </a>
-        <br>
+        <div class="sidebar">
+            <a class="navbar-brand d-flex align-items-center" href="index.php">
+                <img src="../img/logo.png" alt="Logo" width="35" height="35" class="me-2">
+                <strong>Sportify</strong>
+            </a>
+            <br>
 
-        <a href="dashboard_admin.php" class="nav-link active"><ion-icon name="home-outline"></ion-icon> Dashboard</a>
-        <a href="kelola.php" class="nav-link"><ion-icon name="newspaper-outline"></ion-icon> Kelola Artikel</a>
-        <a href="kelola_komentar.php" class="nav-link"><ion-icon name="chatbubble-ellipses-outline"></ion-icon> Komentar</a>
-        <a href="../controller/logout.php" class="nav-link logout"><ion-icon name="log-out-outline"></ion-icon> Logout</a>
+            <a href="dashboard_admin.php" class="nav-link active"><ion-icon name="home-outline"></ion-icon>
+                Dashboard</a>
+            <a href="kelola.php" class="nav-link"><ion-icon name="newspaper-outline"></ion-icon> Kelola Artikel</a>
+            <a href="kelola_komentar.php" class="nav-link"><ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+                Komentar</a>
+            <a href="../controller/logout.php" class="nav-link logout"><ion-icon name="log-out-outline"></ion-icon>
+                Logout</a>
 
-        <div class="bottom-box mt-4">
-            <p>Signed in as</p>
-            <div class="d-flex align-items-center gap-2">
-                <ion-icon name="person-circle-outline" style="font-size: 30px;"></ion-icon>
-                <div>
-                    <strong>Mufid Dhamarjati Kusuma</strong> <br>
-                    <small>Role: admin</small>
+            <div class="bottom-box mt-4">
+                <p>Signed in as</p>
+                <div class="d-flex align-items-center gap-2">
+                    <ion-icon name="person-circle-outline" style="font-size: 30px;"></ion-icon>
+                    <div>
+                        <strong><?= htmlspecialchars($user_name) ?></strong> <br>
+                        <small>Role: <?= htmlspecialchars($user_role) ?></small>
+                    </div>
                 </div>
-            </div>
 
-            <div class="mt-4">
-                <a href="index.php" class="nav-link"><ion-icon name="home-outline"></ion-icon> Kembali Halaman Utama</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="main">
-        <h1>Admin Dashboard</h1>
-        <p>Selamat datang, Mufid Dhamarjati Kusuma — role: admin</p>
-
-        <div class="row mt-4">
-            <div class="col-md-6 mb-4">
-                <div class="card-custom">
-                    <h4>Kelola Artikel</h4>
-                    <p>Tambah / edit / hapus artikel.</p>
-                    <a href="kelola.php">Buka manajemen artikel →</a>
-                </div>
-            </div>
-
-            <div class="col-md-6 mb-4">
-                <div class="card-custom">
-                    <h4>Kelola Komentar</h4>
-                    <p>Review pesan atau komentar dari pengunjung.</p>
-                    <a href="kelola_komentar">Lihat komentar →</a>
+                <div class="mt-4">
+                    <a href="index.php" class="nav-link"><ion-icon name="home-outline"></ion-icon> Kembali Halaman
+                        Utama</a>
                 </div>
             </div>
         </div>
 
-    </div>
+        <div class="main">
+            <h1>Admin Dashboard</h1>
+            <p>Selamat datang, <?= htmlspecialchars($user_name) ?> — role: <?= htmlspecialchars($user_role) ?></p>
 
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+            <div class="row mt-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card-custom">
+                        <h4>Kelola Artikel</h4>
+                        <p>Tambah / edit / hapus artikel.</p>
+                        <a href="kelola.php">Buka manajemen artikel →</a>
+                    </div>
+                </div>
 
-</body>
+                <div class="col-md-6 mb-4">
+                    <div class="card-custom">
+                        <h4>Kelola Komentar</h4>
+                        <p>Review pesan atau komentar dari pengunjung.</p>
+                        <a href="kelola_komentar.php">Lihat komentar →</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+        <script src="theme.js"></script>
+    </body>
+
 </html>

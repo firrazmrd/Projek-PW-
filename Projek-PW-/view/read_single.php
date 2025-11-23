@@ -1,6 +1,7 @@
 <?php
 require_once "../controller/proses_read_single.php";
 if (session_status() === PHP_SESSION_NONE) session_start();
+
 $user_id = $_SESSION['user_id'] ?? null;
 ?>
 <!DOCTYPE html>
@@ -8,18 +9,32 @@ $user_id = $_SESSION['user_id'] ?? null;
 <head>
     <title><?= htmlspecialchars($article['title']) ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Ionicons -->
+    <script type="module"
+            src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule
+            src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        .comment-item { transition: .25s ease; }
+        .comment-item.fade-out { opacity: 0; transform: translateX(-20px); }
+    </style>
 </head>
 
 <body class="bg-light">
 
 <div class="container py-5">
 
-    <a href="index.php" class="btn btn-secondary mb-4">← Kembali</a>
+    <!-- TOMBOL KEMBALI -->
+    <button class="btn btn-secondary mb-4" onclick="history.back()">← Kembali</button>
 
     <!-- ARTIKEL -->
     <div class="card shadow-sm border-0 mb-4">
+
         <?php if (!empty($article['image'])): ?>
-            <img src="../<?= $article['image'] ?>" class="card-img-top" style="max-height:400px; object-fit:cover;">
+            <img src="../<?= $article['image'] ?>" class="card-img-top"
+                 style="max-height:400px; object-fit:cover;">
         <?php endif; ?>
 
         <div class="card-body">
@@ -30,60 +45,36 @@ $user_id = $_SESSION['user_id'] ?? null;
                 <?= date("d M Y", strtotime($article['created_at'])) ?>
             </p>
 
-            <div class="mt-3">
-                <?= $article['content'] ?>
-            </div>
+            <div class="mt-3"><?= $article['content'] ?></div>
         </div>
     </div>
 
-    <!-- LIKE BUTTON -->
-    <form method="post" action="../controller/proses_like.php" class="mt-3">
-        <input type="hidden" name="article_id" value="<?= $article['id'] ?>">
 
-        <button type="submit"
-            class="btn btn-link p-0 text-decoration-none <?= $userLiked ? 'text-danger' : 'text-secondary' ?>"
-            style="font-size: 20px;">
+    <!-- LIKE BUTTON AJAX -->
+    <div class="mb-3">
+        <button id="likeBtn" class="btn p-0 border-0 bg-transparent"
+                style="font-size:28px; display:flex; align-items:center; gap:8px;">
 
-            <?php if ($userLiked): ?>
-                <!-- filled heart -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
-                     class="bi bi-heart-fill me-1">
-                    <path fill-rule="evenodd"
-                          d="M8 1.314C12.438-3.248 23.534 4.735 8 15
-                             -7.534 4.736 3.562-3.248 8 1.314z" />
-                </svg>
-            <?php else: ?>
-                <!-- outline heart -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
-                     class="bi bi-heart me-1">
-                    <path
-                        d="m8 2.748-.717-.737C5.6.281 2.514.878 
-                           1.4 3.053c-.523 1.023-.641 2.5.314 
-                           4.385.92 1.815 2.834 3.989 6.286 
-                           6.357 3.452-2.368 5.365-4.542 
-                           6.286-6.357.955-1.886.838-3.362.314
-                           -4.385C13.486.878 10.4.28 
-                           8.717 2.01L8 2.748zM8 15C-7.333 
-                           4.868 3.279-3.04 7.824 1.143z" />
-                </svg>
-            <?php endif; ?>
+            <ion-icon id="heartIcon"
+                      name="<?= $userLiked ? 'heart-sharp' : 'heart-outline' ?>"
+                      style="color: <?= $userLiked ? '#e63946' : '#444' ?>;">
+            </ion-icon>
 
-            <span class="fw-semibold"><?= $totalLikes ?></span>
+            <span id="likeCount"><?= $totalLikes ?></span>
         </button>
-    </form>
+    </div>
+
 
     <!-- KOMENTAR -->
-    <h4 class="fw-bold mb-3 mt-4">Komentar (<?= count($comments) ?>)</h4>
+    <h4 class="fw-bold mb-3 mt-4">Komentar</h4>
 
-    <!-- FORM KOMENTAR -->
+    <!-- FORM KOMENTAR AJAX -->
     <?php if ($user_id): ?>
-        <form action="../controller/proses_coment.php" method="POST" class="mb-4">
+        <form id="commentForm" class="mb-4">
             <input type="hidden" name="article_id" value="<?= $article['id'] ?>">
             <input type="hidden" name="slug" value="<?= htmlspecialchars($article['slug']) ?>">
 
             <textarea name="content" class="form-control" rows="3" placeholder="Tulis komentar..." required></textarea>
-
-            <small class="text-muted">Jaga etika saat berkomentar ya 😊.</small>
 
             <button class="btn btn-primary mt-2">Kirim</button>
         </form>
@@ -93,38 +84,130 @@ $user_id = $_SESSION['user_id'] ?? null;
         </div>
     <?php endif; ?>
 
-    <!-- LIST KOMENTAR -->
-    <?php if (count($comments) === 0): ?>
-        <p class="text-muted">Belum ada komentar. Jadilah yang pertama!</p>
-    <?php else: ?>
-        <?php foreach ($comments as $c): ?>
-            <div class="card mb-3 shadow-sm">
-                <div class="card-body">
 
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <b><?= htmlspecialchars($c['commenter_name']) ?></b>
-                            <small class="text-muted">• <?= date("d M Y H:i", strtotime($c['created_at'])) ?></small>
+    <!-- LIST KOMENTAR -->
+    <div id="commentList">
+        <?php if (empty($comments)): ?>
+            <p class="text-muted">Belum ada komentar.</p>
+        <?php else: ?>
+            <?php foreach ($comments as $c): ?>
+                <div class="card mb-3 shadow-sm comment-item" id="comment-<?= $c['id'] ?>">
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <b><?= htmlspecialchars($c['commenter_name']) ?></b>
+                                <small class="text-muted">• <?= date("d M Y H:i", strtotime($c['created_at'])) ?></small>
+                            </div>
+
+                            <?php if ($user_id == $c['user_id']): ?>
+                                <button class="btn btn-sm btn-danger delete-comment"
+                                        data-id="<?= $c['id'] ?>">Hapus</button>
+                            <?php endif; ?>
                         </div>
 
-                        <?php if ($user_id == $c['user_id']): ?>
-                            <form action="../controller/proses_coment.php" method="POST"
-                                  onsubmit="return confirm('Hapus komentar ini?');">
-                                <input type="hidden" name="delete_id" value="<?= $c['id'] ?>">
-                                <input type="hidden" name="slug" value="<?= htmlspecialchars($article['slug']) ?>">
-                                <button name="action" value="delete" class="btn btn-sm btn-danger">Hapus</button>
-                            </form>
-                        <?php endif; ?>
+                        <p class="mt-2"><?= nl2br(htmlspecialchars($c['content'])) ?></p>
+
                     </div>
-
-                    <p class="mt-2"><?= nl2br(htmlspecialchars($c['content'])) ?></p>
-
                 </div>
-            </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
 
 </div>
+
+
+<!-- AJAX SCRIPT -->
+<script>
+
+// ==================== LIKE AJAX ====================
+document.getElementById("likeBtn").addEventListener("click", function () {
+
+    fetch("../controller/proses_like.php", {
+        method: "POST",
+        body: new URLSearchParams({
+            article_id: "<?= $article['id'] ?>"
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) return;
+
+        const icon  = document.getElementById("heartIcon");
+        const count = document.getElementById("likeCount");
+
+        icon.name = data.liked ? "heart-sharp" : "heart-outline";
+        icon.style.color = data.liked ? "#e63946" : "#444";
+        count.textContent = data.totalLikes;
+    });
+});
+
+
+// ==================== KOMENTAR - ADD AJAX ====================
+document.getElementById("commentForm")?.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    fetch("../controller/proses_coment.php", {
+        method: "POST",
+        body: new FormData(this)
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        if (data.error) return alert(data.error);
+
+        // Tambahkan komentar baru ke halaman tanpa refresh
+        let html = `
+            <div class="card mb-3 shadow-sm comment-item" id="comment-${data.id}">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <b>${data.name}</b>
+                            <small class="text-muted">• baru saja</small>
+                        </div>
+
+                        <button class="btn btn-sm btn-danger delete-comment" data-id="${data.id}">
+                            Hapus
+                        </button>
+                    </div>
+                    <p class="mt-2">${data.content}</p>
+                </div>
+            </div>`;
+
+        document.getElementById("commentList").insertAdjacentHTML("afterbegin", html);
+
+        this.reset(); // reset form
+    });
+});
+
+
+// ==================== KOMENTAR - DELETE AJAX ====================
+document.addEventListener("click", function (e) {
+    if (!e.target.classList.contains("delete-comment")) return;
+
+    let id = e.target.dataset.id;
+    if (!confirm("Hapus komentar ini?")) return;
+
+    fetch("../controller/proses_coment.php", {
+        method: "POST",
+        body: new URLSearchParams({
+            action: "delete",
+            delete_id: id,
+            slug: "<?= $article['slug'] ?>"
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.success) return;
+
+        let item = document.getElementById("comment-" + id);
+        item.classList.add("fade-out");
+
+        setTimeout(() => item.remove(), 250);
+    });
+});
+
+</script>
 
 </body>
 </html>
