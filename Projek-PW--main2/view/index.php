@@ -400,7 +400,7 @@ html.dark-mode #articleCarousel {
             <?php else: ?>
 
                 <div class="carousel-item active">
-                    <img src="../img/default.jpg" 
+                    <img src="../img/bolas.jpg" 
                         class="d-block w-100"
                         style="height: 420px; object-fit: cover;">
 
@@ -610,5 +610,6 @@ function applyDarkMode() {
 
     
 </body>
+
 
 </html>
