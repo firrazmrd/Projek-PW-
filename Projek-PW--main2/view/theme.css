@@ -1,0 +1,334 @@
+/* ===========================
+   GLOBAL THEME CSS (theme.css)
+   =========================== */
+
+/* --- CORE THEME BODY --- */
+body.dark-mode {
+    background-color: #121212 !important;
+    color: white !important;
+}
+body.light-mode {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+}
+
+/* --- DROPDOWN PROFILE --- */
+.dark-mode .dropdown-menu.custom-dropdown {
+    background: #2b2b2b !important;
+    color: white !important;
+}
+.dark-mode .dropdown-menu.custom-dropdown .dropdown-item {
+    color: white !important;
+}
+.dark-mode .dropdown-menu.custom-dropdown .logout-btn {
+    color: #ff6b6b !important;
+}
+.dark-mode .dropdown-menu.custom-dropdown .dropdown-item:hover {
+    background-color: #444444 !important;
+}
+.dark-mode .dropdown-menu.custom-dropdown .logout-btn:hover {
+    background-color: #441a1a !important;
+}
+
+/* --- SIDEBAR --- */
+.sidebar.dark-mode {
+    background: #212121 !important;
+    border-right: 1px solid #444;
+}
+.sidebar.dark-mode .navbar-brand strong {
+    color: white !important;
+}
+/* Links & Icons */
+.sidebar.dark-mode .nav-link,
+.sidebar.dark-mode .nav-link ion-icon {
+    color: #ddd !important;
+}
+/* Active Link */
+.sidebar.dark-mode .nav-link.active,
+.sidebar.dark-mode .nav-link.active ion-icon {
+    background: #19875429;
+    color: #198754 !important;
+}
+/* Logout Link */
+.sidebar.dark-mode .logout,
+.sidebar.dark-mode .logout ion-icon {
+    color: #ff6b6b !important;
+}
+/* Bottom Box */
+.sidebar.dark-mode .bottom-box {
+    color: #aaa !important;
+    border-top: 1px solid #444;
+}
+.sidebar.dark-mode .bottom-box strong,
+.sidebar.dark-mode .bottom-box ion-icon {
+    color: white !important;
+}
+
+/* --- MAIN CONTENT & KELOLA ARTIKEL TABLE --- */
+.main.dark-mode {
+    color: white !important;
+}
+
+/* Search Input */
+.main.dark-mode .form-control {
+    background-color: #333 !important;
+    color: white !important;
+    border-color: #555 !important;
+}
+.main.dark-mode input.form-control::placeholder {
+    color: #999 !important;
+    opacity: 1;
+}
+
+/* Table Container & Header */
+.table-container.dark-mode {
+    background: #ffffff !important;
+    box-shadow: 0 0 7px rgba(255,255,255,0.1);
+    color: white !important; /* Default text color for the container */
+}
+
+.table-container.dark-mode table thead {
+    background: #3a3a3a !important;
+}
+.table-container.dark-mode table thead th {
+    color: rgb(0, 0, 0) !important; /* Header text color */
+}
+
+/* ** KOREKSI SUPER PENTING: Teks Data Tabel (TD) ** */
+/* Menargetkan table dan td secara eksplisit untuk spesifisitas maksimum */
+.table-container.dark-mode table.table tbody td {
+    color: #000000 !important; /* HARUSNYA INI MEMPERBAIKI WARNA ABU */
+}
+
+/* Zebra stripe */
+.table-container.dark-mode table.table tbody tr:nth-child(even) {
+    background-color: #303030 !important;
+}
+
+/* Teks Muted (No Image, etc.) */
+.table-container.dark-mode .text-muted {
+    color: #aaa !important;
+}
+
+/* Pagination */
+.main.dark-mode .btn-outline-secondary {
+    border-color: #555 !important;
+    color: #ddd !important;
+}
+.main.dark-mode .btn-outline-secondary:hover {
+    background-color: #444 !important;
+    color: white !important;
+}
+
+/* ====================================
+   NEW: Styles for read_single.php (Article View)
+   ==================================== */
+
+/* Apply dark mode styles to the main article and comment cards */
+body.dark-mode .article-card,
+body.dark-mode .comment-card {
+    background-color: #2b2b2b !important;
+    border-color: #444 !important;
+    color: white !important;
+}
+
+/* Pastikan konten teks di dalam card berwarna terang */
+body.dark-mode .article-text,
+body.dark-mode .comment-content-text {
+    color: #ddd !important;
+}
+
+/* Pastikan heading dan teks tebal (b) terlihat putih */
+body.dark-mode h1,
+body.dark-mode h4,
+body.dark-mode b {
+    color: white !important;
+}
+
+/* Override text-muted (digunakan untuk tanggal/penulis/tanggal komentar) */
+body.dark-mode .text-muted,
+body.dark-mode small.text-muted {
+    color: #aaa !important; 
+}
+
+/* Alert Box (untuk prompt Login) */
+body.dark-mode .alert.theme-alert {
+    background-color: #333 !important;
+    border-color: #555 !important;
+    color: #ddd !important;
+}
+body.dark-mode .alert.theme-alert a {
+    color: #89cff0 !important; /* Warna link biru terang */
+}
+
+/* Form controls (Textarea) */
+body.dark-mode .form-control {
+    background-color: #333 !important;
+    color: white !important;
+    border-color: #555 !important;
+}
+body.dark-mode textarea.form-control::placeholder {
+    color: #999 !important;
+    opacity: 1;
+}
+
+/* Warna teks jumlah like */
+body.dark-mode .like-count-text {
+    color: #ddd !important;
+}
+
+/* ====================================
+   NEW: Styles for read.php (Article List)
+   ==================================== */
+
+/* Header and Search Form */
+body.dark-mode .container h2.fw-bold {
+    color: white !important;
+}
+
+body.dark-mode .container .form-control {
+    background-color: #333 !important;
+    color: white !important;
+    border-color: #555 !important;
+}
+body.dark-mode .container .form-control::placeholder {
+    color: #999 !important;
+}
+
+/* Article Cards */
+body.dark-mode .article-list-card {
+    background-color: #2b2b2b !important;
+    border-color: #444 !important;
+}
+body.dark-mode .article-list-card .card-title,
+body.dark-mode .article-list-card .card-text {
+    color: #ddd !important;
+}
+
+/* "Tidak ada gambar" Placeholder */
+body.dark-mode .no-image-placeholder {
+    background-color: #3a3a3a !important;
+}
+
+/* Buttons (Success/Green) */
+body.dark-mode .theme-btn-success {
+    background-color: #157347 !important; /* Darker green */
+    border-color: #146c43 !important;
+    color: white !important;
+}
+body.dark-mode .theme-btn-success:hover {
+    background-color: #0f5132 !important; 
+    border-color: #0a3622 !important;
+}
+
+/* Tombol Kembali (Secondary) */
+body.dark-mode .btn-secondary {
+    background-color: #5a6268 !important;
+    border-color: #545b62 !important;
+    color: white !important;
+}
+
+/* Like & Comment Icons/Text */
+/* Like Icon - Outline */
+body.dark-mode .like-btn ion-icon[name="heart-outline"] {
+    color: #aaa !important; 
+}
+/* Count Text */
+body.dark-mode .like-btn span.like-count {
+    color: #ddd !important; 
+}
+/* Comment Link/Icon/Text */
+body.dark-mode .comment-link,
+body.dark-mode .comment-link ion-icon {
+    color: #aaa !important; 
+}
+
+/* Alert (No articles found) */
+body.dark-mode .alert.theme-alert {
+    background-color: #333 !important;
+    border-color: #555 !important;
+    color: #ddd !important;
+}
+
+/* Pagination */
+body.dark-mode .pagination .page-link.theme-pagination {
+    background-color: #2b2b2b !important;
+    border-color: #444 !important;
+    color: #ddd !important;
+}
+body.dark-mode .pagination .page-item.active .page-link.theme-pagination {
+    background-color: #157347 !important;
+    border-color: #146c43 !important;
+    color: white !important;
+}
+body.dark-mode .pagination .page-item.disabled .page-link {
+    background-color: #212121 !important;
+    border-color: #444 !important;
+    color: #666 !important;
+}
+
+/* ====================================
+   OPTIMIZED: Styles for update.php (Edit Article Form)
+   ==================================== */
+
+/* 1. Main Card Container & Primary Text */
+body.dark-mode .theme-card {
+    background-color: #2b2b2b !important;
+    border-color: #444 !important;
+    color: white !important;
+}
+body.dark-mode .h3,
+body.dark-mode .form-label {
+    color: white !important;
+}
+
+/* 2. Form Controls (Input, Select, Textarea, Thumbnail) */
+body.dark-mode .form-control,
+body.dark-mode .form-select,
+body.dark-mode .theme-img-thumbnail { /* Digabungkan */
+    background-color: #333 !important;
+    border-color: #555 !important;
+}
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+    color: white !important; /* Warna teks input */
+}
+
+/* 3. Placeholder Text */
+body.dark-mode .form-control::placeholder {
+    color: #999 !important;
+    opacity: 1;
+}
+
+/* 4. Success Button (Hijau) */
+body.dark-mode .theme-btn-success {
+    background-color: #157347 !important; 
+    border-color: #146c43 !important;
+    color: white !important;
+}
+body.dark-mode .theme-btn-success:hover {
+    background-color: #0f5132 !important; 
+    border-color: #0a3622 !important;
+}
+
+/* 5. Secondary Button (Abu-abu: Kembali/Batal) */
+body.dark-mode .theme-btn-secondary,
+body.dark-mode .btn-secondary { /* Digabungkan, asumsi btn-secondary juga ada */
+    background-color: #5a6268 !important;
+    border-color: #545b62 !important;
+    color: white !important;
+}
+
+/* 6. Alert/Error (Validation Box) */
+body.dark-mode .alert-danger.theme-alert {
+    background-color: #4a1e1e !important;
+    border-color: #7b2424 !important;
+    color: #ffcccc !important;
+}
+
+/* Catatan untuk TinyMCE: 
+   TinyMCE di-style secara terpisah menggunakan 'skin: oxide-dark'
+   dan 'content_css: dark' di dalam inisialisasi script. 
+*/
+
+
