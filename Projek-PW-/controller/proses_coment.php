@@ -12,7 +12,7 @@ if (!$user_id) {
 $action = $_POST['action'] ?? "add";
 
 
-// ====================== DELETE COMMENT ======================
+//DELETE COMMENT 
 if ($action === "delete") {
 
     $id = (int) $_POST['delete_id'];
@@ -25,7 +25,7 @@ if ($action === "delete") {
 
 
 
-// ====================== ADD COMMENT ======================
+//  ADD COMMENT 
 $article_id = (int) $_POST['article_id'];
 $content    = trim($_POST['content']);
 

@@ -7,9 +7,7 @@ if (!$slug) {
     die("Slug tidak valid");
 }
 
-/* ==========================
-   AMBIL ARTIKEL + NAMA AUTHOR
-========================== */
+/* AMBIL ARTIKEL + NAMA AUTHOR */
 
 $sql = "
     SELECT a.*, u.name AS author_name 
@@ -32,9 +30,7 @@ if (!$article) {
 
 $article_id = (int) $article['id'];
 
-/* ==========================
-   AMBIL SEMUA KOMENTAR ARTIKEL
-========================== */
+/* AMBIL SEMUA KOMENTAR ARTIKEL*/
 
 $sqlKomentar = "
     SELECT c.*, u.name AS commenter_name
@@ -50,9 +46,7 @@ mysqli_stmt_execute($stmtC);
 $comments = mysqli_stmt_get_result($stmtC)->fetch_all(MYSQLI_ASSOC);
 mysqli_stmt_close($stmtC);
 
-/* ==========================
-   JUMLAH LIKE
-========================== */
+/* JUMLAH LIKE*/
 
 $sqlLike = "SELECT COUNT(*) AS total_like FROM likes WHERE article_id = ?";
 $stmtL = mysqli_prepare($koneksi, $sqlLike);
@@ -64,9 +58,7 @@ mysqli_stmt_close($stmtL);
 // dipakai di read_single.php
 $totalLikes = $rowLike['total_like'] ?? 0;
 
-/* ==========================
-   CEK APAKAH USER SUDAH LIKE
-========================== */
+/* CEK APAKAH USER SUDAH LIKE*/
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();

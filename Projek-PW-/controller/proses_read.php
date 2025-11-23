@@ -2,20 +2,12 @@
 require_once __DIR__ . '/../config/koneksi.php';
 session_start();
 
-/*
- |----------------------------------------------
- | 1. PAGINATION
- |----------------------------------------------
-*/
+/*PAGINATION*/
 $perPage = 6;
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 $offset = ($page - 1) * $perPage;
 
-/*
- |----------------------------------------------
- | 2. FILTER GENRE + SEARCH
- |----------------------------------------------
-*/
+/*FILTER GENRE + SEARCH*/
 $search = trim($_GET['q'] ?? '');
 $genre  = trim($_GET['genre'] ?? '');
 
@@ -39,11 +31,7 @@ if ($search !== "") {
     $types   .= "ss";
 }
 
-/*
- |----------------------------------------------
- | 3. HITUNG TOTAL ARTIKEL
- |----------------------------------------------
-*/
+/*3. HITUNG TOTAL ARTIKEL*/
 $sqlCount = "SELECT COUNT(*) AS total FROM articles $where";
 $stmt = mysqli_prepare($koneksi, $sqlCount);
 
@@ -58,11 +46,7 @@ mysqli_stmt_close($stmt);
 
 $totalPages = ceil($totalItems / $perPage);
 
-/*
- |----------------------------------------------
- | 4. AMBIL ARTIKEL SESUAI FILTER
- |----------------------------------------------
-*/
+/*4. AMBIL ARTIKEL SESUAI FILTER */
 $sql = "SELECT * FROM articles $where ORDER BY created_at DESC LIMIT ? OFFSET ?";
 $stmt = mysqli_prepare($koneksi, $sql);
 
@@ -77,11 +61,7 @@ $result = mysqli_stmt_get_result($stmt);
 $articles = mysqli_fetch_all($result, MYSQLI_ASSOC);
 mysqli_stmt_close($stmt);
 
-/*
- |----------------------------------------------
- | 5. HITUNG LIKE, KOMENTAR, CEK USER LIKE
- |----------------------------------------------
-*/
+/*5. HITUNG LIKE, KOMENTAR, CEK USER LIKE*/
 $likesCount     = [];
 $commentsCount  = [];
 $userLiked      = [];

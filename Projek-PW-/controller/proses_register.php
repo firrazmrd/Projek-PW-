@@ -13,14 +13,14 @@ $email = trim($_POST['email'] ?? '');
 $pass  = $_POST['password'] ?? '';
 $pass2 = $_POST['password2'] ?? '';
 
-// --- Validasi field kosong ---
+// Validasi field kosong
 if ($nama === '' || $email === '' || $pass === '' || $pass2 === '') {
     $_SESSION['register_error'] = "Semua field wajib diisi!";
     header("Location: ../view/login.php");
     exit;
 }
 
-// --- Validasi email ---
+// Validasi email
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $_SESSION['register_error'] = "Email tidak valid!";
     header("Location: ../view/login.php");
@@ -75,7 +75,7 @@ $ok = mysqli_stmt_execute($stmt);
 mysqli_stmt_close($stmt);
 mysqli_close($koneksi);
 
-// --- Redirect ---
+// Redirect 
 if ($ok) {
     $_SESSION['register_success'] = "Register berhasil! Silakan login.";
     header("Location: ../view/login.php");
