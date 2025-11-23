@@ -9,34 +9,32 @@ require_admin();
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <title>Buat Artikel</title>
+    <meta charset="UTF-8" />
+    <title>Buat Artikel</title>
 
-  <style>
-      body {
-          font-family: "Poppins";
-      }
-  </style>
+    <style>
+        body {
+            font-family: "Poppins";
+        }
+    </style>
 
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="theme.css"> 
 
 </head>
-<body class="bg-light">
+<body id="body" class="light-mode"> 
 
 <div class="container py-5">
 
-    <!-- 🔙 TOMBOL KEMBALI -->
-    <a href="kelola.php" class="btn btn-secondary mb-4">← Kembali</a>
+    <a href="kelola.php" class="btn btn-secondary mb-4 theme-btn-secondary">← Kembali</a>
 
     <div class="row justify-content-center">
         <div class="col-lg-8">
 
-            <h1 class="h3 mb-4">Buat Artikel</h1>
+            <h1 class="h3 mb-4 fw-bold">Buat Artikel</h1>
 
-            <!-- ERROR -->
             <?php if (!empty($errors)): ?>
-            <div class="alert alert-danger">
+            <div class="alert alert-danger theme-alert"> 
                 <ul class="mb-0">
                     <?php foreach ($errors as $e): ?>
                     <li><?= htmlspecialchars($e) ?></li>
@@ -45,14 +43,12 @@ require_admin();
             </div>
             <?php endif; ?>
 
-            <!-- SUCCESS (JANGAN DIHAPUS, TETAP ADA DI SINI) -->
             <?php if (!empty($_GET['success'])): ?>
-            <div class="alert alert-success">
-                Artikel berhasil disimpan!
+            <div class="alert alert-success theme-alert"> Artikel berhasil disimpan!
             </div>
             <?php endif; ?>
 
-            <div class="card shadow-sm">
+            <div class="card shadow-sm theme-card">
                 <div class="card-body">
 
                     <form action="../controller/proses_create.php" method="POST" enctype="multipart/form-data">
@@ -89,11 +85,10 @@ require_admin();
                             <input type="file" name="image" class="form-control" accept="image/*">
                         </div>
 
-                        <!-- TOMBOL -->
                         <div class="d-flex gap-2 mt-4">
-                            <button type="submit" class="btn btn-success px-4">Simpan</button>
+                            <button type="submit" class="btn btn-success px-4 theme-btn-success">Simpan</button>
 
-                            <a href="kelola.php" class="btn btn-secondary">Batal</a>
+                            <a href="kelola.php" class="btn btn-secondary theme-btn-secondary">Batal</a>
                         </div>
 
                     </form>
@@ -105,18 +100,36 @@ require_admin();
     </div>
 </div>
 
-<!-- TinyMCE Editor -->
 <script src="https://cdn.tiny.cloud/1/2cavu4bix6n6mqx2dtna24bn9uabud3w2sdzqkeiw6wiszzi/tinymce/6/tinymce.min.js"></script>
 
 <script>
-tinymce.init({
-  selector: '#editor',
-  height: 400,
-  plugins: 'image link media table lists code',
-  toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image | code',
-  menubar: false
-});
+// 1. Definisikan konfigurasi dasar
+let tinymceConfig = {
+    selector: '#editor',
+    height: 400,
+    plugins: 'image link media table lists code',
+    toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image | code',
+    menubar: false,
+};
+
+// 2. Cek apakah body memiliki class dark-mode
+const isDarkMode = document.body.classList.contains('dark-mode');
+
+// 3. Tambahkan skin Dark Mode hanya jika diperlukan
+if (isDarkMode) {
+    tinymceConfig.skin = 'oxide-dark';
+    tinymceConfig.content_css = 'dark';
+} else {
+    // Pastikan menggunakan skin Light Mode (default) jika tidak dalam Dark Mode
+    tinymceConfig.skin = 'oxide';
+    tinymceConfig.content_css = 'default';
+}
+
+// 4. Inisialisasi TinyMCE
+tinymce.init(tinymceConfig);
 </script>
+
+<script defer src="theme.js"></script> 
 
 </body>
 </html>

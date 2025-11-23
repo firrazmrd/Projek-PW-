@@ -8,6 +8,7 @@ require_admin();
 
 require "../config/koneksi.php";  // sesuaikan path bila perlu
 
+
 // ===== CEK LOGIN =====
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -24,16 +25,16 @@ $user_role = $data['role']; // admin / user
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
 
+    
+    <link href="theme.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
         body {
             font-family: "Poppins";
@@ -105,14 +106,14 @@ $user_role = $data['role']; // admin / user
             padding: 25px;
             border-radius: 15px;
             background: white;
-            box-shadow: 0 0 7px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 0 7px rgba(0,0,0,0.08);
             border: none;
             transition: .2s;
         }
 
         .card-custom:hover {
             transform: translateY(-3px);
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
 
         .card-custom h4 {
@@ -129,74 +130,104 @@ $user_role = $data['role']; // admin / user
         .card-custom a:hover {
             text-decoration: underline;
         }
+
+        .sidebar.dark-mode {
+            background: #212121 !important; /* Contoh warna sidebar gelap */
+            border-right: 1px solid #444;
+        }
+
+        .main.dark-mode {
+            background: #121212 !important; /* Background gelap dashboard */
+            color: white !important;
+        }
+        
+        .main.dark-mode h1, .main.dark-mode h4 {
+            color: white !important;
+        }
+
+        .main.dark-mode p, .main.dark-mode .bottom-box p, .main.dark-mode .bottom-box small {
+            color: #ccc !important;
+        }
+
+        .card-custom.dark-mode {
+            background: #2b2b2b !important;
+            box-shadow: 0 0 7px rgba(255,255,255,0.1);
+        }
+        
+        .card-custom.dark-mode:hover {
+            box-shadow: 0 0 15px rgba(255,255,255,0.15);
+        }
+        
+        /* Nav link di dark mode */
+        .sidebar.dark-mode .nav-link {
+            color: #ddd;
+        }
+        
+        .sidebar.dark-mode .nav-link:hover,
+        .sidebar.dark-mode .nav-link.active {
+            background: #19875429;
+            color: #198754;
+        }
     </style>
 
 </head>
+<body id="body"> 
 
-<body>
-    <!-- <div id="modeSwitch" class="theme-switch"></div>
-    <body id="body">
-        <nav id="navbar"></nav> -->
+    <div class="sidebar" id="sidebar">
+        <a class="navbar-brand d-flex align-items-center" href="index.php">
+            <img src="../img/logo.png" alt="Logo" width="35" height="35" class="me-2">
+            <strong>Sportify</strong>
+        </a>
+        <br>
 
-        <div class="sidebar">
-            <a class="navbar-brand d-flex align-items-center" href="index.php">
-                <img src="../img/logo.png" alt="Logo" width="35" height="35" class="me-2">
-                <strong>Sportify</strong>
-            </a>
-            <br>
+        <a href="dashboard_admin.php" class="nav-link active"><ion-icon name="home-outline"></ion-icon> Dashboard</a>
+        <a href="kelola.php" class="nav-link"><ion-icon name="newspaper-outline"></ion-icon> Kelola Artikel</a>
+        <a href="kelola_komentar.php" class="nav-link"><ion-icon name="chatbubble-ellipses-outline"></ion-icon> Komentar</a>
+        <a href="../controller/logout.php" class="nav-link logout"><ion-icon name="log-out-outline"></ion-icon> Logout</a>
 
-            <a href="dashboard_admin.php" class="nav-link active"><ion-icon name="home-outline"></ion-icon>
-                Dashboard</a>
-            <a href="kelola.php" class="nav-link"><ion-icon name="newspaper-outline"></ion-icon> Kelola Artikel</a>
-            <a href="kelola_komentar.php" class="nav-link"><ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-                Komentar</a>
-            <a href="../controller/logout.php" class="nav-link logout"><ion-icon name="log-out-outline"></ion-icon>
-                Logout</a>
-
-            <div class="bottom-box mt-4">
-                <p>Signed in as</p>
-                <div class="d-flex align-items-center gap-2">
-                    <ion-icon name="person-circle-outline" style="font-size: 30px;"></ion-icon>
-                    <div>
-                        <strong><?= htmlspecialchars($user_name) ?></strong> <br>
-                        <small>Role: <?= htmlspecialchars($user_role) ?></small>
-                    </div>
+        <div class="bottom-box mt-4">
+            <p>Signed in as</p>
+            <div class="d-flex align-items-center gap-2">
+                <ion-icon name="person-circle-outline" style="font-size: 30px;"></ion-icon>
+                <div>
+                    <strong><?= htmlspecialchars($user_name) ?></strong> <br>
+                    <small>Role: <?= htmlspecialchars($user_role) ?></small>
                 </div>
+            </div>
 
-                <div class="mt-4">
-                    <a href="index.php" class="nav-link"><ion-icon name="home-outline"></ion-icon> Kembali Halaman
-                        Utama</a>
+            <div class="mt-4">
+                <a href="index.php" class="nav-link"><ion-icon name="home-outline"></ion-icon> Kembali Halaman Utama</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+        <h1>Admin Dashboard</h1>
+        <p>Selamat datang, <?= htmlspecialchars($user_name) ?> — role: <?= htmlspecialchars($user_role) ?></p>
+
+        <div class="row mt-4">
+            <div class="col-md-6 mb-4">
+                <div class="card-custom">
+                    <h4>Kelola Artikel</h4>
+                    <p>Tambah / edit / hapus artikel.</p>
+                    <a href="kelola.php">Buka manajemen artikel →</a>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card-custom">
+                    <h4>Kelola Komentar</h4>
+                    <p>Review pesan atau komentar dari pengunjung.</p>
+                    <a href="kelola_komentar.php">Lihat komentar →</a>
                 </div>
             </div>
         </div>
 
-        <div class="main">
-            <h1>Admin Dashboard</h1>
-            <p>Selamat datang, <?= htmlspecialchars($user_name) ?> — role: <?= htmlspecialchars($user_role) ?></p>
+    </div>
+    
+    <script defer src="theme.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-            <div class="row mt-4">
-                <div class="col-md-6 mb-4">
-                    <div class="card-custom">
-                        <h4>Kelola Artikel</h4>
-                        <p>Tambah / edit / hapus artikel.</p>
-                        <a href="kelola.php">Buka manajemen artikel →</a>
-                    </div>
-                </div>
-
-                <div class="col-md-6 mb-4">
-                    <div class="card-custom">
-                        <h4>Kelola Komentar</h4>
-                        <p>Review pesan atau komentar dari pengunjung.</p>
-                        <a href="kelola_komentar.php">Lihat komentar →</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-        <script src="theme.js"></script>
-    </body>
-
+</body>
 </html>

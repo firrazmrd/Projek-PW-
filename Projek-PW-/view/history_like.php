@@ -31,6 +31,7 @@ $likes = mysqli_fetch_all($result, MYSQLI_ASSOC);
 <meta charset="UTF-8">
 <title>History Like</title>
 
+<link rel="stylesheet" href="theme.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -68,24 +69,27 @@ $likes = mysqli_fetch_all($result, MYSQLI_ASSOC);
         margin-left: 260px;
         padding: 40px;
     }
+    .sidebar.dark-mode .nav-link[style*="red"] {
+            color: #ff6b6b !important; /* Warna merah untuk Logout */
+        }
 </style>
 
 </head>
 <body>
 
 <!-- SIDEBAR -->
-<div class="sidebar">
+<div class="sidebar theme-card" id="sidebar">
         <a class="navbar-brand d-flex align-items-center" href="index.php">
             <img src="../img/logo.png" width="35" class="me-2">
             <strong>Sportify</strong>
         </a>
         <br>
 
-        <a href="dashboard_user.php" class="nav-link active">
+        <a href="dashboard_user.php" class="nav-link">
             <ion-icon name="home-outline"></ion-icon> Dashboard
         </a>
 
-        <a href="history_like.php" class="nav-link">
+        <a href="history_like.php" class="nav-link active">
             <ion-icon name="heart-outline"></ion-icon> History Like
         </a>
 
@@ -163,6 +167,7 @@ $likes = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 </div>
 
+<script defer src="theme.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 

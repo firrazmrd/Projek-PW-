@@ -31,29 +31,27 @@ unset($_SESSION['errors']);
 <meta charset="UTF-8">
 <title>Edit Artikel</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
 <style>
-    body { font-family: "Poppins"; }
+    body { 
+        font-family: "Poppins"; 
+        /* Pastikan background Light Mode konsisten */
+        background-color: #f5f6fa;
+    }
 </style>
 
+<link rel="stylesheet" href="theme.css"> 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
-<body class="bg-light">
+<body id="body"> <div class="container py-5">
 
-<div class="container py-5">
-
-    <!-- 🔙 TOMBOL KEMBALI -->
-    <a href="kelola.php" class="btn btn-secondary mb-4">← Kembali</a>
-
-    <div class="row justify-content-center">
+    <a href="kelola.php" class="btn btn-secondary mb-4 theme-btn-secondary">← Kembali</a> <div class="row justify-content-center">
         <div class="col-lg-8">
 
-            <h1 class="h3 mb-4">Edit Artikel</h1>
+            <h1 class="h3 mb-4 fw-bold">Edit Artikel</h1>
 
-            <!-- Error -->
             <?php if (!empty($errors)): ?>
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
+                <div class="alert alert-danger theme-alert"> <ul class="mb-0">
                         <?php foreach ($errors as $err): ?>
                             <li><?= htmlspecialchars($err) ?></li>
                         <?php endforeach; ?>
@@ -61,21 +59,18 @@ unset($_SESSION['errors']);
                 </div>
             <?php endif; ?>
 
-            <div class="card shadow-sm">
-                <div class="card-body">
+            <div class="card shadow-sm theme-card"> <div class="card-body">
 
                     <form action="../controller/proses_update.php" method="POST" enctype="multipart/form-data">
 
                         <input type="hidden" name="id" value="<?= $article['id'] ?>">
 
-                        <!-- JUDUL -->
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Judul</label>
                             <input type="text" name="title" class="form-control"
-                                   value="<?= htmlspecialchars($article['title']) ?>" required>
+                                       value="<?= htmlspecialchars($article['title']) ?>" required>
                         </div>
 
-                        <!-- GENRE -->
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Kategori</label>
                             <select name="genre" class="form-select" required>
@@ -93,7 +88,6 @@ unset($_SESSION['errors']);
                             </select>
                         </div>
 
-                        <!-- CONTENT -->
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Isi Artikel</label>
                             <textarea id="editor" name="content" class="form-control" rows="10">
@@ -101,28 +95,23 @@ unset($_SESSION['errors']);
                             </textarea>
                         </div>
 
-                        <!-- GAMBAR -->
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Gambar Saat Ini</label><br>
 
                             <?php if ($article['image']): ?>
-                                <img src="../<?= $article['image'] ?>" class="img-thumbnail mb-2"
-                                     style="width: 200px;">
-                            <?php else: ?>
+                                <img src="../<?= $article['image'] ?>" class="img-thumbnail mb-2 theme-img-thumbnail"
+                                     style="width: 200px;"> <?php else: ?>
                                 <p class="text-muted">Tidak ada gambar</p>
                             <?php endif; ?>
 
                             <input type="file" name="image" class="form-control" accept="image/*">
                         </div>
 
-                        <!-- TOMBOL -->
                         <div class="d-flex gap-3 mt-4">
-                            <button type="submit" class="btn btn-success px-4">
-                                Simpan Perubahan
+                            <button type="submit" class="btn btn-success px-4 theme-btn-success"> Simpan Perubahan
                             </button>
 
-                            <a href="kelola.php" class="btn btn-secondary">
-                                Batal
+                            <a href="kelola.php" class="btn btn-secondary theme-btn-secondary"> Batal
                             </a>
                         </div>
 
@@ -135,17 +124,33 @@ unset($_SESSION['errors']);
     </div>
 </div>
 
-<!-- Editor -->
 <script src="https://cdn.tiny.cloud/1/2cavu4bix6n6mqx2dtna24bn9uabud3w2sdzqkeiw6wiszzi/tinymce/6/tinymce.min.js"></script>
 <script>
-tinymce.init({
-  selector: '#editor',
-  height: 400,
-  plugins: 'image link media table lists code',
-  toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image | code',
-  menubar: false
-});
+let tinymceConfig = {
+    selector: '#editor',
+    height: 400,
+    plugins: 'image link media table lists code',
+    toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image | code',
+    menubar: false,
+};
+
+// 2. Cek apakah body memiliki class dark-mode
+const isDarkMode = document.body.classList.contains('dark-mode');
+
+// 3. Tambahkan skin Dark Mode hanya jika diperlukan
+if (isDarkMode) {
+    tinymceConfig.skin = 'oxide-dark';
+    tinymceConfig.content_css = 'dark';
+} else {
+    // Pastikan menggunakan skin Light Mode (default) jika tidak dalam Dark Mode
+    tinymceConfig.skin = 'oxide';
+    tinymceConfig.content_css = 'default';
+}
+
+// 4. Inisialisasi TinyMCE
+tinymce.init(tinymceConfig);
 </script>
 
+<script defer src="theme.js"></script>
 </body>
 </html>

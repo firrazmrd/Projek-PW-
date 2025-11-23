@@ -9,8 +9,7 @@ require_once "../controller/proses_read.php";
     <title>Artikel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
-
+    <link rel="stylesheet" href="theme.css">
     <style>
         .btn-icon {
             padding: 0;
@@ -25,28 +24,38 @@ require_once "../controller/proses_read.php";
         .icon-default {
             color: #6c757d !important;
         }
+
+        /* Tambahkan style dasar Light Mode untuk body agar konsisten */
+        body {
+            background-color: #f5f6fa;
+        }
+
+        .two-lines {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            /* batas 2 baris */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
     </style>
 </head>
 
-<body class="bg-light">
-
+<body id="body">
     <div class="container py-5">
 
-        <!-- TOMBOL KEMBALI -->
-        <button class="btn btn-success mb-4" onclick="history.back()">← Kembali</button>
+        <button class="btn btn-secondary mb-4" onclick="history.back()">← Kembali</button>
 
-        <!-- HEADER + SEARCH -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="fw-bold">Daftar Artikel</h2>
 
             <form method="GET" class="d-flex" style="gap: 10px;">
                 <input type="text" name="q" class="form-control" placeholder="Cari artikel..."
                     value="<?= htmlspecialchars($search) ?>">
-                <button class="btn btn-success">Cari</button>
+                <button class="btn btn-success theme-btn-success">Cari</button>
             </form>
         </div>
 
-        <!-- ARTIKEL LIST -->
         <div class="row g-4">
             <?php if (count($articles) > 0): ?>
 
@@ -59,56 +68,44 @@ require_once "../controller/proses_read.php";
                     ?>
 
                     <div class="col-sm-6 col-lg-4">
-                        <div class="card shadow-sm border-0">
-
-                            <!-- GAMBAR -->
-                            <?php if (!empty($a['image'])): ?>
+                        <div class="card shadow-sm border-0 article-list-card"> <?php if (!empty($a['image'])): ?>
                                 <img src="../<?= $a['image'] ?>" class="card-img-top" style="height:180px; object-fit:cover;">
                             <?php else: ?>
-                                <div class="bg-secondary text-white text-center py-5">Tidak ada gambar</div>
+                                <div class="bg-secondary text-white text-center py-5 no-image-placeholder">Tidak ada gambar</div>
                             <?php endif; ?>
 
                             <div class="card-body">
 
-                                <!-- JUDUL -->
                                 <h5 class="card-title fw-semibold"><?= htmlspecialchars($a['title']) ?></h5>
 
-                                <!-- TANGGAL -->
-                                <p class="text-muted small mb-1"><?= date("d M Y", strtotime($a['created_at'])) ?></p>
+                                <p class="text-muted small mb-1 "><?= date("d M Y", strtotime($a['created_at'])) ?></p>
 
-                                <!-- EXCERPT -->
-                                <p class="card-text">
+                                <p class="card-text two-lines">
                                     <?= substr(strip_tags($a['content']), 0, 100) ?>...
                                 </p>
 
-                                <!-- BACA LENGKAP -->
-                                <a href="read_single.php?slug=<?= urlencode($a['slug']) ?>" class="btn btn-success btn-sm">
-                                    Baca Selengkapnya
+                                <a href="read_single.php?slug=<?= urlencode($a['slug']) ?>"
+                                    class="btn btn-success btn-sm theme-btn-success"> Baca Selengkapnya
                                 </a>
 
-                                <!-- LIKE & COMMENT -->
                                 <div class="d-flex align-items-center mt-3">
 
-                                    <!-- ICON LIKE (menuju read_single) -->
                                     <button class="like-btn d-flex align-items-center" data-article-id="<?= $a['id'] ?>"
-                                        style="border:none; background:none; font-size:22px; color:<?= $hasLiked ? 'red' : 'gray' ?>">
+                                        style="border:none; background:none; font-size:22px;">
 
-                                        <ion-icon class="like-icon"
-                                            name="<?= $hasLiked ? 'heart' : 'heart-outline' ?>"></ion-icon>
-
-                                        <span class="fw-semibold ms-1 like-count" style="font-size:18px;">
+                                        <ion-icon class="like-icon" name="<?= $hasLiked ? 'heart' : 'heart-outline' ?>"
+                                            style="color: <?= $hasLiked ? '#e63946' : '#6c757d' ?>;"></ion-icon> <span
+                                            class="fw-semibold ms-1 like-count" style="font-size:18px;">
                                             <?= $countLikes ?>
                                         </span>
                                     </button>
 
 
 
-                                    <!-- ICON KOMENTAR -->
                                     <a href="read_single.php?slug=<?= urlencode($a['slug']) ?>"
-                                        class="d-flex align-items-center text-secondary ms-4"
-                                        style="text-decoration:none; font-size:22px;">
-
-                                        <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+                                        class="d-flex align-items-center text-secondary ms-4 comment-link"
+                                        style="text-decoration:none; font-size:22px;"> <ion-icon
+                                            name="chatbubble-ellipses-outline"></ion-icon>
                                         <span class="fw-semibold ms-1" style="font-size:18px;">
                                             <?= $countComments ?>
                                         </span>
@@ -124,28 +121,26 @@ require_once "../controller/proses_read.php";
                 <?php endforeach; ?>
 
             <?php else: ?>
-                <div class="alert alert-warning text-center">Tidak ada artikel ditemukan</div>
-            <?php endif; ?>
+                <div class="alert alert-warning text-center theme-alert">Tidak ada artikel ditemukan</div> <?php endif; ?>
         </div>
 
-        <!-- PAGINATION -->
         <nav class="mt-4">
             <ul class="pagination justify-content-center">
 
                 <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-                    <a class="page-link btn-success text-white"
+                    <a class="page-link theme-pagination"
                         href="?page=<?= $page - 1 ?>&q=<?= urlencode($search) ?>">Prev</a>
                 </li>
 
                 <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                     <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                        <a class="page-link btn-success text-white"
+                        <a class="page-link theme-pagination <?= $i == $page ? 'active' : '' ?>"
                             href="?page=<?= $i ?>&q=<?= urlencode($search) ?>"><?= $i ?></a>
                     </li>
                 <?php endfor; ?>
 
                 <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-                    <a class="page-link btn-success text-white"
+                    <a class="page-link theme-pagination"
                         href="?page=<?= $page + 1 ?>&q=<?= urlencode($search) ?>">Next</a>
                 </li>
 
@@ -154,9 +149,19 @@ require_once "../controller/proses_read.php";
 
     </div>
 
-    <!-- YANG DI UBAH TADI PAGI -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+
+            // Fungsi untuk menentukan warna ikon berdasarkan status like dan tema
+            function getIconColor(isLiked) {
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                if (isLiked) {
+                    return "#e63946"; // Selalu merah jika disukai
+                } else {
+                    // Warna default ikon disesuaikan dengan tema
+                    return isDarkMode ? "#aaa" : "#6c757d";
+                }
+            }
 
             document.querySelectorAll(".like-btn").forEach(btn => {
 
@@ -180,13 +185,8 @@ require_once "../controller/proses_read.php";
                             }
 
                             // Update icon
-                            if (data.liked) {
-                                icon.name = "heart";
-                                icon.style.color = "#e63946";
-                            } else {
-                                icon.name = "heart-outline";
-                                icon.style.color = "#6c757d";
-                            }
+                            icon.name = data.liked ? "heart" : "heart-outline";
+                            icon.style.color = getIconColor(data.liked); // Gunakan fungsi untuk warna
 
                             // Update jumlah like
                             countSpan.textContent = data.totalLikes;
@@ -200,10 +200,9 @@ require_once "../controller/proses_read.php";
     </script>
 
 
-
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script src="theme.js"></script>
+    <script defer src="theme.js"></script>
 </body>
 
 </html>

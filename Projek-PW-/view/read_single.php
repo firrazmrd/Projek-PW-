@@ -9,66 +9,58 @@ $user_id = $_SESSION['user_id'] ?? null;
 <head>
     <title><?= htmlspecialchars($article['title']) ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Ionicons -->
-    <script type="module"
+    <link rel="stylesheet" href="theme.css"> <script type="module"
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
     <style>
+        /* BASE STYLES/TRANSITION */
         .comment-item { transition: .25s ease; }
         .comment-item.fade-out { opacity: 0; transform: translateX(-20px); }
+        /* Light Mode body background (overrides default Bootstrap bg-light) */
+        body {
+            background-color: #f5f6fa;
+        }
     </style>
 </head>
 
-<body class="bg-light">
+<body id="body"> <div class="container py-5">
 
-<div class="container py-5">
-
-    <!-- TOMBOL KEMBALI -->
     <button class="btn btn-secondary mb-4" onclick="history.back()">← Kembali</button>
 
-    <!-- ARTIKEL -->
-    <div class="card shadow-sm border-0 mb-4">
-
-        <?php if (!empty($article['image'])): ?>
+    <div class="card shadow-sm border-0 mb-4 article-card"> <?php if (!empty($article['image'])): ?>
             <img src="../<?= $article['image'] ?>" class="card-img-top"
                  style="max-height:400px; object-fit:cover;">
         <?php endif; ?>
 
-        <div class="card-body">
+        <div class="card-body article-content">
             <h1 class="fw-bold"><?= htmlspecialchars($article['title']) ?></h1>
 
             <p class="text-muted mb-4">
                 Oleh <b><?= htmlspecialchars($article['author_name']) ?></b> •
-                <?= date("d M Y", strtotime($article['created_at'])) ?>
+                <small class="text-muted"><?= date("d M Y", strtotime($article['created_at'])) ?></small>
             </p>
 
-            <div class="mt-3"><?= $article['content'] ?></div>
-        </div>
+            <div class="mt-3 article-text"><?= $article['content'] ?></div> </div>
     </div>
 
 
-    <!-- LIKE BUTTON AJAX -->
     <div class="mb-3">
         <button id="likeBtn" class="btn p-0 border-0 bg-transparent"
                 style="font-size:28px; display:flex; align-items:center; gap:8px;">
 
             <ion-icon id="heartIcon"
-                      name="<?= $userLiked ? 'heart-sharp' : 'heart-outline' ?>"
-                      style="color: <?= $userLiked ? '#e63946' : '#444' ?>;">
+                     name="<?= $userLiked ? 'heart-sharp' : 'heart-outline' ?>"
+                     style="color: <?= $userLiked ? '#e63946' : '#444' ?>;">
             </ion-icon>
 
-            <span id="likeCount"><?= $totalLikes ?></span>
-        </button>
+            <span id="likeCount" class="like-count-text"><?= $totalLikes ?></span> </button>
     </div>
 
 
-    <!-- KOMENTAR -->
     <h4 class="fw-bold mb-3 mt-4">Komentar</h4>
 
-    <!-- FORM KOMENTAR AJAX -->
     <?php if ($user_id): ?>
         <form id="commentForm" class="mb-4">
             <input type="hidden" name="article_id" value="<?= $article['id'] ?>">
@@ -79,25 +71,22 @@ $user_id = $_SESSION['user_id'] ?? null;
             <button class="btn btn-primary mt-2">Kirim</button>
         </form>
     <?php else: ?>
-        <div class="alert alert-info">
-            <a href="login.php"><b>Login</b></a> untuk menulis komentar.
+        <div class="alert alert-info theme-alert"> <a href="login.php"><b>Login</b></a> untuk menulis komentar.
         </div>
     <?php endif; ?>
 
 
-    <!-- LIST KOMENTAR -->
     <div id="commentList">
         <?php if (empty($comments)): ?>
             <p class="text-muted">Belum ada komentar.</p>
         <?php else: ?>
             <?php foreach ($comments as $c): ?>
-                <div class="card mb-3 shadow-sm comment-item" id="comment-<?= $c['id'] ?>">
-                    <div class="card-body">
+                <div class="card mb-3 shadow-sm comment-item comment-card" id="comment-<?= $c['id'] ?>"> <div class="card-body">
 
                         <div class="d-flex justify-content-between">
                             <div>
                                 <b><?= htmlspecialchars($c['commenter_name']) ?></b>
-                                <small class="text-muted">• <?= date("d M Y H:i", strtotime($c['created_at'])) ?></small>
+                                <small class="text-muted comment-date-muted">• <?= date("d M Y H:i", strtotime($c['created_at'])) ?></small>
                             </div>
 
                             <?php if ($user_id == $c['user_id']): ?>
@@ -106,9 +95,7 @@ $user_id = $_SESSION['user_id'] ?? null;
                             <?php endif; ?>
                         </div>
 
-                        <p class="mt-2"><?= nl2br(htmlspecialchars($c['content'])) ?></p>
-
-                    </div>
+                        <p class="mt-2 comment-content-text"><?= nl2br(htmlspecialchars($c['content'])) ?></p> </div>
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
@@ -117,9 +104,8 @@ $user_id = $_SESSION['user_id'] ?? null;
 </div>
 
 
-<!-- AJAX SCRIPT -->
 <script>
-
+// ... (Skrip AJAX yang ada tetap sama)
 // ==================== LIKE AJAX ====================
 document.getElementById("likeBtn").addEventListener("click", function () {
 
@@ -136,8 +122,11 @@ document.getElementById("likeBtn").addEventListener("click", function () {
         const icon  = document.getElementById("heartIcon");
         const count = document.getElementById("likeCount");
 
+        // Logic warna ikon berdasarkan status like
+        let iconColor = data.liked ? "#e63946" : document.body.classList.contains('dark-mode') ? "#aaa" : "#444";
+        
         icon.name = data.liked ? "heart-sharp" : "heart-outline";
-        icon.style.color = data.liked ? "#e63946" : "#444";
+        icon.style.color = iconColor;
         count.textContent = data.totalLikes;
     });
 });
@@ -158,19 +147,19 @@ document.getElementById("commentForm")?.addEventListener("submit", function (e) 
 
         // Tambahkan komentar baru ke halaman tanpa refresh
         let html = `
-            <div class="card mb-3 shadow-sm comment-item" id="comment-${data.id}">
+            <div class="card mb-3 shadow-sm comment-item comment-card" id="comment-${data.id}">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
                             <b>${data.name}</b>
-                            <small class="text-muted">• baru saja</small>
+                            <small class="text-muted comment-date-muted">• baru saja</small>
                         </div>
 
                         <button class="btn btn-sm btn-danger delete-comment" data-id="${data.id}">
                             Hapus
                         </button>
                     </div>
-                    <p class="mt-2">${data.content}</p>
+                    <p class="mt-2 comment-content-text">${data.content}</p>
                 </div>
             </div>`;
 
@@ -206,8 +195,6 @@ document.addEventListener("click", function (e) {
         setTimeout(() => item.remove(), 250);
     });
 });
-
 </script>
-
-</body>
+<script defer src="theme.js"></script> </body>
 </html>

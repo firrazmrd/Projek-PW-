@@ -34,8 +34,10 @@ $comments = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="theme.css"> 
 
     <style>
+        /* === LIGHT MODE / BASE STYLES === */
         body {
             font-family: "Poppins", sans-serif;
             background: #f5f6fa;
@@ -95,17 +97,22 @@ $comments = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
         table thead {
             background: #e5e5e5;
-            border-radius: 12px;
+            /* Hapus border-radius: 12px agar konsisten */
         }
 
         table thead th {
             font-weight: 600;
-            padding: 14px;
+            padding: 14px; /* Konsisten dengan kelola.php */
         }
 
+        /* LIGHT MODE ZEBRA STRIPING */
         table tbody td {
-            padding: 13px;
+            padding: 14px; /* Konsisten dengan kelola.php */
             vertical-align: middle;
+            /* Background diatur oleh TR melalui TD untuk Light Mode */
+        }
+        
+        table tbody tr:nth-child(odd) td {
             background: #f8f8f8;
         }
 
@@ -125,13 +132,13 @@ $comments = mysqli_fetch_all($result, MYSQLI_ASSOC);
         .btn-delete:hover {
             background: #c0392b;
         }
+
     </style>
 </head>
 
-<body>
+<body id="body">
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
         <a class="navbar-brand d-flex align-items-center" href="index.php">
             <img src="../img/logo.png" width="35" class="me-2">
             <strong>Sportify</strong>
@@ -173,8 +180,7 @@ $comments = mysqli_fetch_all($result, MYSQLI_ASSOC);
         </div>
     </div>
 
-    <!-- MAIN -->
-    <div class="main">
+    <div class="main" id="main-content">
         <h1 class="fw-bold">Kelola Komentar</h1>
 
         <div class="table-container mt-4">
@@ -199,7 +205,7 @@ $comments = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                 <td><?= htmlspecialchars($c['content']) ?></td>
                                 <td class="text-center">
                                     <form action="../controller/delete_comment.php" method="POST"
-                                          onsubmit="return confirm('Hapus komentar ini?')" style="display:inline;">
+                                            onsubmit="return confirm('Hapus komentar ini?')" style="display:inline;">
                                         <input type="hidden" name="id" value="<?= $c['id'] ?>">
                                         <button class="btn-delete">hapus</button>
                                     </form>
@@ -212,6 +218,7 @@ $comments = mysqli_fetch_all($result, MYSQLI_ASSOC);
         </div>
     </div>
 
+    <script defer src="theme.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 

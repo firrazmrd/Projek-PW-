@@ -1,4 +1,16 @@
-<?php session_start(); ?>
+<?php
+session_start(); 
+require_once __DIR__ . '/../config/koneksi.php';
+require_once __DIR__ . '/../controller/auth.php';
+
+function dashboard_link_for_role() {
+    $role = $_SESSION['user_role'] ?? 'user';
+    if ($role === 'admin') {
+        return 'dashboard_admin.php'; // atau 'admin/' kalau index.php di folder admin
+    }
+    return 'dashboard_user.php'; // atau 'users/'
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,10 +20,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="theme.css">
+    <script defer src="theme.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <style>
+
+    .carousel-item img {
+    height: 450px;
+    object-fit: cover;
+    }
+
+
     body {
         font-family: "Poppins";
     }
@@ -146,6 +167,28 @@
         background-color: #f8d7da !important;
         /* merah muda */
     }
+
+    /* Default (dark) */
+    .profile-btn {
+        color: white !important;
+    }
+
+    /* Light mode */
+    .light-mode .profile-btn {
+        color: #212529 !important; /* warna teks gelap */
+    }
+
+    /* Default = Dark mode */
+    html.dark-mode .profile-btn {
+        color: #ffffff !important;
+    }
+
+    /* Light mode */
+    html.light-mode .profile-btn {
+        color: #212529 !important; 
+    }
+
+
     </style>
 
 </head>
@@ -170,11 +213,13 @@
                 <div class="me-auto"></div>
 
                 <!-- SEARCH -->
-                <form class="d-flex mx-auto" style="max-width: 400px;" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search">
+                <form class="d-flex mx-auto" style="max-width: 400px;" role="search" method="GET" action="read.php">
+
+                    <input class="form-control me-2" type="search" name="q" placeholder="Search">
+
                     <button class="btn btn-success" type="submit">Search</button>
                 </form>
-
+                
                 <div class="d-flex align-items-center ms-auto">
 
                     <!-- DARK MODE BUTTON -->
@@ -194,7 +239,7 @@
 
                     <!-- LOGGED IN → Show Profile Dropdown -->
                     <div class="dropdown">
-                        <button class="btn d-flex align-items-center px-3 py-1 text-white border rounded-pill"
+                        <button id="profileDropdownBtn" class="btn dark-mode d-flex align-items-center px-3 py-1 border rounded-pill profile-btn"
                             id="profileDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false"
                             style="background: transparent;">
 
@@ -209,7 +254,7 @@
                         </button>
 
                         <ul class="dropdown-menu dropdown-menu-end shadow custom-dropdown">
-                            <li><a class="dropdown-item" href="dashboard_admin.php">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="<?= dashboard_link_for_role() ?>">Dashboard</a></li>
 
                             <li>
                                 <form action="../controller/logout.php" method="POST" class="m-0">
@@ -261,125 +306,190 @@
     </div>
 
 
+    <?php
+            // Ambil artikel terbaru genre Sepak Bola
+            
+        // =============================
+        //   DAFTAR GENRE OTOMATIS
+        // =============================
+        $genreList = [
+            "Sepak Bola" => "Soccer",
+            "Basket" => "Basketball",
+            "Bulu Tangkis" => "Badminton",
+            "Tenis" => "Tennis",
+            "Voli" => "Volleyball",
+            "Renang" => "Swimming",
+            "Atletik" => "Athletics",
+            "Tinju" => "Boxing",
+            "MotoGP" => "MotoGP",
+            "Lainnya" => "Lainnya"
+        ];
+
+        // =============================
+        //   LOOP TIAP GENRE
+        // =============================
+        foreach ($genreList as $dbGenre => $displayName):
+
+            $sql = "SELECT id, title, image, slug 
+                    FROM articles 
+                    WHERE genre = ?
+                    ORDER BY created_at DESC 
+                    LIMIT 10";
+
+            $stmt = mysqli_prepare($koneksi, $sql);
+            mysqli_stmt_bind_param($stmt, "s", $dbGenre);
+            mysqli_stmt_execute($stmt);
+            $resultGenre = mysqli_stmt_get_result($stmt);
+        ?>
     <div class="container mt-5">
+
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3>Soccer</h3>
-            <a href="#" class="text-secondary">Show all</a>
+            <h3><?= htmlspecialchars($displayName) ?></h3>
+            <a href="read.php?genre=<?= urlencode($dbGenre) ?>" class="text-secondary">Show all</a>
         </div>
 
         <div class="scroll-row">
-            <div class="sport-card">
-                <img src="../img/bolas.jpeg">
-                <p>Teknik Dribbling Modern</p>
+
+            <?php if (mysqli_num_rows($resultGenre) > 0): ?>
+            <?php while ($row = mysqli_fetch_assoc($resultGenre)): ?>
+
+            <div class="sport-card" onclick="window.location.href='read_single.php?slug=<?= $row['slug'] ?>'">
+
+                <?php if (!empty($row['image'])): ?>
+                <img src="../<?= htmlspecialchars($row['image']) ?>">
+                <?php else: ?>
+                <img src="../img/default.jpg">
+                <?php endif; ?>
+
+                <p><?= htmlspecialchars($row['title']) ?></p>
             </div>
 
-            <div class="sport-card">
-                <img src="../img/bolas.jpeg">
-                <p>Cara Shooting yang Benar</p>
-            </div>
+            <?php endwhile; ?>
+            <?php else: ?>
+            <p class="text">Belum ada artikel <?= htmlspecialchars($displayName) ?>.</p>
+            <?php endif; ?>
 
-            <div class="sport-card">
-                <img src="../img/bolas.jpeg">
-                <p>Latihan Fisik Pemain Pro</p>
-            </div>
-
-            <div class="sport-card">
-                <img src="../img/bolas.jpeg">
-                <p>Strategi 4-3-3 Modern</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3>Basketball</h3>
-            <a href="#" class="text-secondary">Show all</a>
         </div>
 
-        <div class="scroll-row">
-            <div class="sport-card">
-                <img src="../img/bola.jpeg">
-                <p>Belajar Layup</p>
-            </div>
-
-            <div class="sport-card">
-                <img src="../img/bola.jpeg">
-                <p>Cara Melakukan Slam Dunk</p>
-            </div>
-
-            <div class="sport-card">
-                <img src="../img/bola.jpeg">
-                <p>Panduan Shooting Jarak Jauh</p>
-            </div>
-
-            <div class="sport-card">
-                <img src="../img/bola.jpeg">
-                <p>Drill Defense Pro</p>
-            </div>
-        </div>
     </div>
-    </div>
+
+    <?php endforeach; ?>
+
     <script>
     const modeSwitch = document.getElementById("modeSwitch");
     const body = document.getElementById("body");
     const navbar = document.getElementById("navbar");
+    const profileBtn = document.getElementById("profileDropdownBtn");
+    const dropdownMenu = document.querySelector(".custom-dropdown"); // ⬅ dropdown menu
 
     let isDark = true;
-    modeSwitch.classList.remove("light");
-    body.classList.add("bg-dark", "text-white");
-    navbar.classList.add("navbar-dark", "bg-dark");
 
-    // === Saat halaman index dibuka, cek mode terakhir ===
+    // === CEK MODE TERSIMPAN ===
     let savedMode = localStorage.getItem("themeMode");
-    let html = document.documentElement;
-    html.classList.remove("dark-mode", "light-mode");
 
     if (savedMode === "light") {
+        applyLightMode();
         isDark = false;
-        modeSwitch.classList.add("light");
-        body.classList.remove("bg-dark","text-white");
-        body.classList.add("bg-white","text-dark");
-        navbar.classList.remove("navbar-dark","bg-dark");
-        navbar.classList.add("navbar-light","bg-light");
-        html.classList.add("light-mode");
     } else {
+        applyDarkMode();
         isDark = true;
-        modeSwitch.classList.remove("light");
-        body.classList.add("bg-dark","text-white");
-        navbar.classList.add("navbar-dark","bg-dark");
-        html.classList.add("dark-mode");
     }
 
-
+    // === SWITCH MODE ===
     modeSwitch.addEventListener("click", () => {
         isDark = !isDark;
 
         if (isDark) {
             localStorage.setItem("themeMode", "dark");
-            modeSwitch.classList.remove("light");
-
-            body.classList.remove("bg-white", "text-dark");
-            body.classList.add("bg-dark", "text-white");
-
-            navbar.classList.remove("navbar-light", "bg-light");
-            navbar.classList.add("navbar-dark", "bg-dark");
-
+            applyDarkMode();
         } else {
             localStorage.setItem("themeMode", "light");
-            modeSwitch.classList.add("light");
-
-            body.classList.remove("bg-dark", "text-white");
-            body.classList.add("bg-white", "text-dark");
-
-            navbar.classList.remove("navbar-dark", "bg-dark");
-            navbar.classList.add("navbar-light", "bg-light");
+            applyLightMode();
         }
     });
 
+    // =============================
+    // DARK MODE
+    // =============================
+    // =============================
+// DARK MODE
+// =============================
+function applyDarkMode() {
+    modeSwitch.classList.remove("light");
 
+    body.classList.remove("bg-white", "text-dark");
+    body.classList.add("bg-dark", "text-white");
+
+    navbar.classList.remove("navbar-light", "bg-light");
+    navbar.classList.add("navbar-dark", "bg-dark");
+    
+    // Hilangkan style.color untuk profileBtn di sini karena sudah ada di CSS
+    // if (profileBtn) profileBtn.style.color = "white"; 
+    
+    // DROPDOWN MENU
+    if (dropdownMenu) {
+        // Ganti background
+        dropdownMenu.style.backgroundColor = "#2b2b2b";
+        // Tambahkan style untuk teks di dropdown menu secara umum
+        dropdownMenu.style.color = "white"; 
+    }
+
+    // item dropdown (Dashboard)
+    document.querySelectorAll(".custom-dropdown .dropdown-item").forEach(i => {
+        i.style.color = "white"; 
+        // Tambahkan style hover yang sesuai untuk dark mode jika perlu
+        i.addEventListener('mouseover', () => i.style.backgroundColor = '#444');
+        i.addEventListener('mouseout', () => i.style.backgroundColor = 'transparent');
+    });
+
+    // logout item merah tetap
+    let logout = document.querySelector(".logout-btn");
+    if (logout) {
+        logout.style.color = "#ff6b6b"; // Merah muda untuk Dark Mode
+        // Tambahkan style hover untuk logout di dark mode
+        logout.addEventListener('mouseover', () => logout.style.backgroundColor = '#441a1a');
+        logout.addEventListener('mouseout', () => logout.style.backgroundColor = 'transparent');
+    }
+}
+
+// **Pastikan Anda juga menghapus atau menyesuaikan bagian hover di applyLightMode() jika Anda menambahkannya di sini**
+
+    // =============================
+    // LIGHT MODE
+    // =============================
+    function applyLightMode() {
+        modeSwitch.classList.add("light");
+
+        body.classList.remove("bg-dark", "text-white");
+        body.classList.add("bg-white", "text-dark");
+
+        navbar.classList.remove("navbar-dark", "bg-dark");
+        navbar.classList.add("navbar-light", "bg-light");
+
+        // username hitam
+        if (profileBtn) profileBtn.style.color = "black";
+
+        // dropdown terang
+        if (dropdownMenu) {
+            dropdownMenu.style.backgroundColor = "#e9ecef";
+            dropdownMenu.style.color = "black";
+        }
+
+        // item dropdown hitam
+        document.querySelectorAll(".custom-dropdown .dropdown-item").forEach(i => {
+            i.style.color = "#212529";
+        });
+
+        let logout = document.querySelector(".logout-btn");
+        if (logout) logout.style.color = "#dc3545";
+    }
     </script>
 
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    
 </body>
 
 </html>
