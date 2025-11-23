@@ -6,22 +6,19 @@ require_once __DIR__ . '/../controller/auth.php';
 
 require_admin();
 
-require "../config/koneksi.php";  // sesuaikan path bila perlu
+require "../config/koneksi.php";
 
-
-// ===== CEK LOGIN =====
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
 
-// ===== AMBIL DATA USER DARI DATABASE =====
 $user_id = $_SESSION['user_id'];
 $query = mysqli_query($koneksi, "SELECT name, role FROM users WHERE id = '$user_id'");
 $data = mysqli_fetch_assoc($query);
 
 $user_name = $data['name'];
-$user_role = $data['role']; // admin / user
+$user_role = $data['role'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -132,12 +129,12 @@ $user_role = $data['role']; // admin / user
         }
 
         .sidebar.dark-mode {
-            background: #212121 !important; /* Contoh warna sidebar gelap */
+            background: #212121 !important;
             border-right: 1px solid #444;
         }
 
         .main.dark-mode {
-            background: #121212 !important; /* Background gelap dashboard */
+            background: #121212 !important;
             color: white !important;
         }
         
@@ -158,7 +155,6 @@ $user_role = $data['role']; // admin / user
             box-shadow: 0 0 15px rgba(255,255,255,0.15);
         }
         
-        /* Nav link di dark mode */
         .sidebar.dark-mode .nav-link {
             color: #ddd;
         }

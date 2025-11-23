@@ -15,7 +15,6 @@ $user = mysqli_fetch_assoc($q);
 $user_name = $user['name'];
 $user_role = $user['role'];
 
-// ambil komentar user
 $sql = "SELECT comments.content, comments.created_at, articles.title, articles.slug
         FROM comments 
         JOIN articles ON comments.article_id = articles.id
@@ -69,7 +68,7 @@ $comments = mysqli_fetch_all($res, MYSQLI_ASSOC);
         padding: 40px;
     }
     .sidebar.dark-mode .nav-link[style*="red"] {
-            color: #ff6b6b !important; /* Warna merah untuk Logout */
+            color: #ff6b6b !important;
     }
 </style>
 </head>

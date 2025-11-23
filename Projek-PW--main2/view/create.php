@@ -103,7 +103,7 @@ require_admin();
 <script src="https://cdn.tiny.cloud/1/2cavu4bix6n6mqx2dtna24bn9uabud3w2sdzqkeiw6wiszzi/tinymce/6/tinymce.min.js"></script>
 
 <script>
-// 1. Definisikan konfigurasi dasar
+/* manggil tiny */ 
 let tinymceConfig = {
     selector: '#editor',
     height: 400,
@@ -112,23 +112,11 @@ let tinymceConfig = {
     menubar: false,
 };
 
-// 2. Cek apakah body memiliki class dark-mode
-const isDarkMode = document.body.classList.contains('dark-mode');
-
-// 3. Tambahkan skin Dark Mode hanya jika diperlukan
-if (isDarkMode) {
-    tinymceConfig.skin = 'oxide-dark';
-    tinymceConfig.content_css = 'dark';
-} else {
-    // Pastikan menggunakan skin Light Mode (default) jika tidak dalam Dark Mode
     tinymceConfig.skin = 'oxide';
     tinymceConfig.content_css = 'default';
-}
 
-// 4. Inisialisasi TinyMCE
 tinymce.init(tinymceConfig);
 </script>
-
 <script defer src="theme.js"></script> 
 
 </body>

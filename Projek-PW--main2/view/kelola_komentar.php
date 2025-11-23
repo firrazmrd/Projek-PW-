@@ -2,13 +2,11 @@
 session_start();
 require "../config/koneksi.php";
 
-// Cek login
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
 
-// Ambil data user
 $user_id = $_SESSION['user_id'];
 $q = mysqli_query($koneksi, "SELECT name, role FROM users WHERE id = '$user_id'");
 $user = mysqli_fetch_assoc($q);
@@ -16,7 +14,6 @@ $user = mysqli_fetch_assoc($q);
 $user_name = $user['name'];
 $user_role = $user['role'];
 
-// Ambil komentar
 $sql = "SELECT comments.id, comments.content, users.name AS user_name 
         FROM comments 
         LEFT JOIN users ON comments.user_id = users.id
@@ -37,12 +34,12 @@ $comments = mysqli_fetch_all($result, MYSQLI_ASSOC);
     <link rel="stylesheet" href="theme.css"> 
 
     <style>
-        /* === LIGHT MODE / BASE STYLES === */
         body {
             font-family: "Poppins", sans-serif;
             background: #f5f6fa;
         }
 
+        /* sidebar */
         .sidebar {
             width: 260px;
             height: 100vh;
@@ -97,19 +94,17 @@ $comments = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
         table thead {
             background: #e5e5e5;
-            /* Hapus border-radius: 12px agar konsisten */
         }
 
         table thead th {
             font-weight: 600;
-            padding: 14px; /* Konsisten dengan kelola.php */
+            padding: 14px;
         }
 
-        /* LIGHT MODE ZEBRA STRIPING */
+        /* zebra */
         table tbody td {
-            padding: 14px; /* Konsisten dengan kelola.php */
+            padding: 14px;
             vertical-align: middle;
-            /* Background diatur oleh TR melalui TD untuk Light Mode */
         }
         
         table tbody tr:nth-child(odd) td {

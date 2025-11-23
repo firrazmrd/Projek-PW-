@@ -2,7 +2,6 @@
 session_start();
 require "../config/koneksi.php";
 
-// Cek login
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
@@ -15,7 +14,6 @@ $user = mysqli_fetch_assoc($q);
 $user_name = $user['name'];
 $user_role = $user['role'];
 
-// Ambil history like
 $sql = "SELECT likes.id, articles.title, articles.genre, articles.image, articles.created_at, articles.slug
         FROM likes
         JOIN articles ON likes.article_id = articles.id
@@ -70,14 +68,13 @@ $likes = mysqli_fetch_all($result, MYSQLI_ASSOC);
         padding: 40px;
     }
     .sidebar.dark-mode .nav-link[style*="red"] {
-            color: #ff6b6b !important; /* Warna merah untuk Logout */
+            color: #ff6b6b !important;
         }
 </style>
 
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar theme-card" id="sidebar">
         <a class="navbar-brand d-flex align-items-center" href="index.php">
             <img src="../img/logo.png" width="35" class="me-2">
@@ -117,7 +114,6 @@ $likes = mysqli_fetch_all($result, MYSQLI_ASSOC);
         </div>
     </div>
 
-<!-- MAIN -->
 <div class="main">
 
     <h1 class="fw-bold mb-4">History Like</h1>

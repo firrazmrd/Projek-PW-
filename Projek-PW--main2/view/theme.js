@@ -7,15 +7,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const articleTableContainer = document.getElementById("article-table-container");
     
     const profileBtn = document.getElementById("profileDropdownBtn");
-    const themeSwitch = document.getElementById("modeSwitch"); // Mengambil elemen switch mode
+    const themeSwitch = document.getElementById("modeSwitch");
 
-    // Ambil mode dari localStorage
+    // simpen nek g ambil modemalam
     let mode = localStorage.getItem("themeMode") || "dark";
-
-    // Terapkan mode saat halaman dimuat
     applyMode(mode);
 
-    // Pastikan themeSwitch ada sebelum menambahkan listener
+    // buat nge cek dark mode
     if (themeSwitch) {
         themeSwitch.addEventListener("click", () => {
             mode = (mode === "dark") ? "light" : "dark";
@@ -26,10 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     function applyMode(mode) {
-        // Mendapatkan semua kartu yang mungkin ada di dashboard
         const allCards = document.querySelectorAll(".card-custom"); 
 
-        // === DARK MODE ===
+        // dark mode
         if (mode === "dark") {
             body.classList.remove("light-mode");
             body.classList.add("dark-mode");
@@ -56,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
             
             themeSwitch?.classList.remove("light");
         
-        // === LIGHT MODE ===
+        // light mode
         } else {
             body.classList.remove("dark-mode");
             body.classList.add("light-mode");

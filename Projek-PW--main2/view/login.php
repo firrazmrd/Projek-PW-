@@ -10,9 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-    /* ============================================
-   FONT & RESET
-============================================ */
+
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
     * {
@@ -22,9 +20,6 @@
         font-family: 'Poppins', sans-serif;
     }
 
-    /* ============================================
-   BASE LAYOUT LOGIN PAGE
-============================================ */
     body {
         display: flex;
         justify-content: center;
@@ -35,7 +30,7 @@
         background-position: center;
     }
 
-    /* CARD WRAPPER */
+    /* wrapper buat login */
     .wrapper {
         position: relative;
         width: 400px;
@@ -53,7 +48,7 @@
         min-height: 620px;
     }
 
-    /* CLOSE BUTTON */
+    /* btn x */
     .icon-close {
         position: absolute;
         top: 0;
@@ -74,9 +69,7 @@
         color: #000;
     }
 
-    /* ============================================
-   LOGIN / REGISTER FORM BOX
-============================================ */
+    /* form regis sm log*/
     .form-box {
         width: 100%;
         padding: 40px;
@@ -110,7 +103,7 @@
         text-align: center;
     }
 
-    /* INPUT FIELD */
+    /* input fomr */
     .input-box {
         position: relative;
         width: 100%;
@@ -155,7 +148,7 @@
         line-height: 55px;
     }
 
-    /* REMEMBER & REGISTER */
+    /* cekbox */
     .remember-forgot {
         display: flex;
         justify-content: space-between;
@@ -175,7 +168,7 @@
         color: #000;
     }
 
-    /* TOMBOL LOGIN */
+    /* bnt lgn */
     .btn {
         width: 100%;
         height: 45px;
@@ -188,9 +181,7 @@
         transition: 0.3s;
     }
 
-    /* ============================================
-   ALERT
-============================================ */
+    /* alert */
     .alert-box {
         width: 100%;
         padding: 10px 15px;
@@ -221,9 +212,7 @@
         }
     }
 
-    /* ============================================
-   DARK MODE (APPLY VIA HTML CLASS)
-============================================ */
+    /* darkmode */
     .dark-mode body {
         background-color: #111 !important;
         color: white !important;
@@ -261,9 +250,7 @@
         color: white !important;
     }
 
-    /* ============================================
-   LIGHT MODE
-============================================ */
+    /* light mode */
     .light-mode body {
         background-color: white !important;
         color: black !important;
@@ -300,10 +287,7 @@
     .light-mode .icon-close ion-icon {
         color: black !important;
     }
-
-    /* ============================================
-   LINK LOGIN / REGISTER SELALU BIRU
-============================================ */
+/* biar regis sm log ttp biru */
     .auth-link {
         color: #3498db !important;
         font-weight: 600;
@@ -313,7 +297,6 @@
         color: #5dade2 !important;
     }
 
-    /* Link lain mengikuti tema */
     .dark-mode .login-register a:not(.auth-link) {
         color: white !important;
     }
@@ -363,10 +346,6 @@
                     </span>
                     <input type="password" name="password" required placeholder=" ">
                     <label>Password</label>
-                </div>
-
-                <div class="remember-forgot">
-                    <label><input type="checkbox"> Remember me</label>
                 </div>
 
                 <button type="submit" class="btn">Login</button>
@@ -455,7 +434,6 @@
 
     <script>
     let mode = localStorage.getItem("themeMode");
-    // === Baca mode terakhir dari localStorage ===
     let savedMode = localStorage.getItem("themeMode");
     const body = document.body;
 
@@ -463,7 +441,6 @@
         document.documentElement.classList.add("light-mode");
 
     } else {
-        // Dark Mode
         document.documentElement.classList.add("dark-mode");
     }
     </script>

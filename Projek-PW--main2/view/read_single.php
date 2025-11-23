@@ -15,10 +15,8 @@ $user_id = $_SESSION['user_id'] ?? null;
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
     <style>
-        /* BASE STYLES/TRANSITION */
         .comment-item { transition: .25s ease; }
         .comment-item.fade-out { opacity: 0; transform: translateX(-20px); }
-        /* Light Mode body background (overrides default Bootstrap bg-light) */
         body {
             background-color: #f5f6fa;
         }
@@ -105,8 +103,7 @@ $user_id = $_SESSION['user_id'] ?? null;
 
 
 <script>
-// ... (Skrip AJAX yang ada tetap sama)
-// ==================== LIKE AJAX ====================
+/* manggil ajax kayak buat file svg like gt */
 document.getElementById("likeBtn").addEventListener("click", function () {
 
     fetch("../controller/proses_like.php", {
@@ -132,7 +129,7 @@ document.getElementById("likeBtn").addEventListener("click", function () {
 });
 
 
-// ==================== KOMENTAR - ADD AJAX ====================
+/* ajax komen nambah */
 document.getElementById("commentForm")?.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -145,7 +142,7 @@ document.getElementById("commentForm")?.addEventListener("submit", function (e) 
 
         if (data.error) return alert(data.error);
 
-        // Tambahkan komentar baru ke halaman tanpa refresh
+        /* biar g k refresh abis upload */
         let html = `
             <div class="card mb-3 shadow-sm comment-item comment-card" id="comment-${data.id}">
                 <div class="card-body">
@@ -165,12 +162,12 @@ document.getElementById("commentForm")?.addEventListener("submit", function (e) 
 
         document.getElementById("commentList").insertAdjacentHTML("afterbegin", html);
 
-        this.reset(); // reset form
+        this.reset();
     });
 });
 
 
-// ==================== KOMENTAR - DELETE AJAX ====================
+/* hapus komen pk ajx */
 document.addEventListener("click", function (e) {
     if (!e.target.classList.contains("delete-comment")) return;
 

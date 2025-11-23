@@ -34,7 +34,6 @@ unset($_SESSION['errors']);
 <style>
     body { 
         font-family: "Poppins"; 
-        /* Pastikan background Light Mode konsisten */
         background-color: #f5f6fa;
     }
 </style>
@@ -134,20 +133,12 @@ let tinymceConfig = {
     menubar: false,
 };
 
-// 2. Cek apakah body memiliki class dark-mode
+/* manggil tiny ace */
 const isDarkMode = document.body.classList.contains('dark-mode');
 
-// 3. Tambahkan skin Dark Mode hanya jika diperlukan
-if (isDarkMode) {
-    tinymceConfig.skin = 'oxide-dark';
-    tinymceConfig.content_css = 'dark';
-} else {
-    // Pastikan menggunakan skin Light Mode (default) jika tidak dalam Dark Mode
-    tinymceConfig.skin = 'oxide';
-    tinymceConfig.content_css = 'default';
-}
+tinymceConfig.skin = 'oxide';
+tinymceConfig.content_css = 'default';
 
-// 4. Inisialisasi TinyMCE
 tinymce.init(tinymceConfig);
 </script>
 
