@@ -1,0 +1,303 @@
+/* theme mode buat atus dark mode global */
+/* penyesuaian warna */
+body.dark-mode {
+    background-color: #121212 !important;
+    color: white !important;
+}
+body.light-mode {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+}
+
+/* dropdown user */
+.dark-mode .dropdown-menu.custom-dropdown {
+    background: #2b2b2b !important;
+    color: white !important;
+}
+.dark-mode .dropdown-menu.custom-dropdown .dropdown-item {
+    color: white !important;
+}
+.dark-mode .dropdown-menu.custom-dropdown .logout-btn {
+    color: #ff6b6b !important;
+}
+.dark-mode .dropdown-menu.custom-dropdown .dropdown-item:hover {
+    background-color: #444444 !important;
+}
+.dark-mode .dropdown-menu.custom-dropdown .logout-btn:hover {
+    background-color: #441a1a !important;
+}
+
+/* sidebar  */
+.sidebar.dark-mode {
+    background: #212121 !important;
+    border-right: 1px solid #444;
+}
+.sidebar.dark-mode .navbar-brand strong {
+    color: white !important;
+}
+/* warnain icon sidebar */
+.sidebar.dark-mode .nav-link,
+.sidebar.dark-mode .nav-link ion-icon {
+    color: #ddd !important;
+}
+/* aktif link  sidebar */
+.sidebar.dark-mode .nav-link.active,
+.sidebar.dark-mode .nav-link.active ion-icon {
+    background: #19875429;
+    color: #198754 !important;
+}
+/* link logout */
+.sidebar.dark-mode .logout,
+.sidebar.dark-mode .logout ion-icon {
+    color: #ff6b6b !important;
+}
+/* sidebar user sm index */
+.sidebar.dark-mode .bottom-box {
+    color: #aaa !important;
+    border-top: 1px solid #444;
+}
+.sidebar.dark-mode .bottom-box strong,
+.sidebar.dark-mode .bottom-box ion-icon {
+    color: white !important;
+}
+
+/* kelola.php */
+.main.dark-mode {
+    color: white !important;
+}
+
+/* search */
+.main.dark-mode .form-control {
+    background-color: #333 !important;
+    color: white !important;
+    border-color: #555 !important;
+}
+.main.dark-mode input.form-control::placeholder {
+    color: #999 !important;
+    opacity: 1;
+}
+
+/* table */
+.table-container.dark-mode {
+    background: #ffffff !important;
+    box-shadow: 0 0 7px rgba(255,255,255,0.1);
+    color: white !important;
+}
+
+.table-container.dark-mode table thead {
+    background: #3a3a3a !important;
+}
+.table-container.dark-mode table thead th {
+    color: rgb(0, 0, 0) !important;
+}
+
+.table-container.dark-mode table.table tbody td {
+    color: #000000 !important; 
+}
+
+/* tabel belang */
+.table-container.dark-mode table.table tbody tr:nth-child(even) {
+    background-color: #303030 !important;
+}
+
+.table-container.dark-mode .text-muted {
+    color: #aaa !important;
+}
+
+/* next */
+.main.dark-mode .btn-outline-secondary {
+    border-color: #555 !important;
+    color: #ddd !important;
+}
+.main.dark-mode .btn-outline-secondary:hover {
+    background-color: #444 !important;
+    color: white !important;
+}
+
+/* read_single.php */
+body.dark-mode .article-card,
+body.dark-mode .comment-card {
+    background-color: #2b2b2b !important;
+    border-color: #444 !important;
+    color: white !important;
+}
+
+body.dark-mode .article-text,
+body.dark-mode .comment-content-text {
+    color: #ddd !important;
+}
+
+body.dark-mode h1,
+body.dark-mode h4,
+body.dark-mode b {
+    color: white !important;
+}
+
+body.dark-mode .text-muted,
+body.dark-mode small.text-muted {
+    color: #aaa !important; 
+}
+
+body.dark-mode .alert.theme-alert {
+    background-color: #333 !important;
+    border-color: #555 !important;
+    color: #ddd !important;
+}
+body.dark-mode .alert.theme-alert a {
+    color: #89cff0 !important;
+}
+
+/* text area */
+body.dark-mode .form-control {
+    background-color: #333 !important;
+    color: white !important;
+    border-color: #555 !important;
+}
+body.dark-mode textarea.form-control::placeholder {
+    color: #999 !important;
+    opacity: 1;
+}
+
+/* jumlah like */
+body.dark-mode .like-count-text {
+    color: #ddd !important;
+}
+
+/* read.php */
+body.dark-mode .container h2.fw-bold {
+    color: white !important;
+}
+
+body.dark-mode .container .form-control {
+    background-color: #333 !important;
+    color: white !important;
+    border-color: #555 !important;
+}
+body.dark-mode .container .form-control::placeholder {
+    color: #999 !important;
+}
+
+/* artikel per 1 */
+body.dark-mode .article-list-card {
+    background-color: #2b2b2b !important;
+    border-color: #444 !important;
+}
+body.dark-mode .article-list-card .card-title,
+body.dark-mode .article-list-card .card-text {
+    color: #ddd !important;
+}
+
+/* kl gd gambar */
+body.dark-mode .no-image-placeholder {
+    background-color: #3a3a3a !important;
+}
+
+/* btn info  */
+body.dark-mode .theme-btn-success {
+    background-color: #157347 !important;
+    border-color: #146c43 !important;
+    color: white !important;
+}
+body.dark-mode .theme-btn-success:hover {
+    background-color: #0f5132 !important; 
+    border-color: #0a3622 !important;
+}
+
+/* btn balik */
+body.dark-mode .btn-secondary {
+    background-color: #5a6268 !important;
+    border-color: #545b62 !important;
+    color: white !important;
+}
+
+/* warna icon */
+body.dark-mode .like-btn ion-icon[name="heart-outline"] {
+    color: #aaa !important; 
+}
+
+body.dark-mode .like-btn span.like-count {
+    color: #ddd !important; 
+}
+
+body.dark-mode .comment-link,
+body.dark-mode .comment-link ion-icon {
+    color: #aaa !important; 
+}
+
+/* alert null */
+body.dark-mode .alert.theme-alert {
+    background-color: #333 !important;
+    border-color: #555 !important;
+    color: #ddd !important;
+}
+
+/* next prev */
+body.dark-mode .pagination .page-link.theme-pagination {
+    background-color: #2b2b2b !important;
+    border-color: #444 !important;
+    color: #ddd !important;
+}
+body.dark-mode .pagination .page-item.active .page-link.theme-pagination {
+    background-color: #157347 !important;
+    border-color: #146c43 !important;
+    color: white !important;
+}
+body.dark-mode .pagination .page-item.disabled .page-link {
+    background-color: #212121 !important;
+    border-color: #444 !important;
+    color: #666 !important;
+}
+
+/* update.php */
+body.dark-mode .theme-card {
+    background-color: #2b2b2b !important;
+    border-color: #444 !important;
+    color: white !important;
+}
+body.dark-mode .h3,
+body.dark-mode .form-label {
+    color: white !important;
+}
+
+/* form */
+body.dark-mode .form-control,
+body.dark-mode .form-select,
+body.dark-mode .theme-img-thumbnail {
+    background-color: #333 !important;
+    border-color: #555 !important;
+}
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+    color: white !important;
+}
+
+body.dark-mode .form-control::placeholder {
+    color: #999 !important;
+    opacity: 1;
+}
+
+/* btn update */
+body.dark-mode .theme-btn-success {
+    background-color: #157347 !important; 
+    border-color: #146c43 !important;
+    color: white !important;
+}
+body.dark-mode .theme-btn-success:hover {
+    background-color: #0f5132 !important; 
+    border-color: #0a3622 !important;
+}
+
+/* btn batal sm kembali */
+body.dark-mode .theme-btn-secondary,
+body.dark-mode .btn-secondary {
+    background-color: #5a6268 !important;
+    border-color: #545b62 !important;
+    color: white !important;
+}
+
+/* elert */
+body.dark-mode .alert-danger.theme-alert {
+    background-color: #4a1e1e !important;
+    border-color: #7b2424 !important;
+    color: #ffcccc !important;
+}
